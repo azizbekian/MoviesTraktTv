@@ -1,0 +1,270 @@
+[
+  {
+    "type": "movie",
+    "score": 76.56495,
+    "movie": {
+      "title": "Sherlock Holmes",
+      "overview": "Long considered lost since its first release, the Gillette film is a vital missing link in the history of Holmes on screen.By the time the film was made, Gillette had been established as the world’s foremost interpreter of Holmes on stage. He gave his face and manner to the detective and inspired the classic illustrations of Frederic Dorr Steele.The film faithfully retains the play’s famous set pieces—Holmes’s encounter with Professor Moriarty, his daring escape from the Stepney Gas Chamber, and the tour-de-force deductions—and illustrates how Gillette wove bits from Conan Doyle’s stories, ranging from “A Scandal in Bohemia” to “The Final Problem,” into an original, innovative mystery play.",
+      "year": 1916,
+      "images": {
+        "poster": {
+          "full": null,
+          "medium": null,
+          "thumb": null
+        },
+        "fanart": {
+          "full": null,
+          "medium": null,
+          "thumb": null
+        }
+      },
+      "ids": {
+        "trakt": 224398,
+        "slug": "sherlock-holmes-1916",
+        "imdb": "tt0007338",
+        "tmdb": 342831
+      }
+    }
+  },
+  {
+    "type": "movie",
+    "score": 76.56495,
+    "movie": {
+      "title": "Shivering Sherlocks",
+      "overview": "The stooges witness an armed robbery and are brought in by the cops as suspects. After passing a lie detector test, the boys are freed but are now the only ones who can identify the crooks. Meanwhile, their friend Gladys has inherited a house in the country and the boys go with her to inspect it so she won't be gypped when its sold. The house turns out to be the crook's hideout, and when they abduct Gladys, the stooges must rescue her.",
+      "year": 1948,
+      "images": {
+        "poster": {
+          "full": "https://walter.trakt.us/images/movies/000/081/069/posters/original/d70df3f712.jpg",
+          "medium": "https://walter.trakt.us/images/movies/000/081/069/posters/medium/d70df3f712.jpg",
+          "thumb": "https://walter.trakt.us/images/movies/000/081/069/posters/thumb/d70df3f712.jpg"
+        },
+        "fanart": {
+          "full": "https://walter.trakt.us/images/movies/000/081/069/fanarts/original/de03b43d6e.jpg",
+          "medium": "https://walter.trakt.us/images/movies/000/081/069/fanarts/medium/de03b43d6e.jpg",
+          "thumb": "https://walter.trakt.us/images/movies/000/081/069/fanarts/thumb/de03b43d6e.jpg"
+        }
+      },
+      "ids": {
+        "trakt": 81069,
+        "slug": "shivering-sherlocks-1948",
+        "imdb": "tt0040781",
+        "tmdb": 116120
+      }
+    }
+  },
+  {
+    "type": "movie",
+    "score": 61.251957,
+    "movie": {
+      "title": "Young Sherlock Holmes",
+      "overview": "Sherlock Holmes and Dr. Watson meet as boys in an English Boarding school. Holmes is known for his deductive ability even as a youth, amazing his classmates with his abilities. When they discover a plot to murder a series of British business men by an Egyptian cult, they move to stop it.",
+      "year": 1985,
+      "images": {
+        "poster": {
+          "full": "https://walter.trakt.us/images/movies/000/006/922/posters/original/03e4293731.jpg",
+          "medium": "https://walter.trakt.us/images/movies/000/006/922/posters/medium/03e4293731.jpg",
+          "thumb": "https://walter.trakt.us/images/movies/000/006/922/posters/thumb/03e4293731.jpg"
+        },
+        "fanart": {
+          "full": "https://walter.trakt.us/images/movies/000/006/922/fanarts/original/07a57f4e0a.jpg",
+          "medium": "https://walter.trakt.us/images/movies/000/006/922/fanarts/medium/07a57f4e0a.jpg",
+          "thumb": "https://walter.trakt.us/images/movies/000/006/922/fanarts/thumb/07a57f4e0a.jpg"
+        }
+      },
+      "ids": {
+        "trakt": 6922,
+        "slug": "young-sherlock-holmes-1985",
+        "imdb": "tt0090357",
+        "tmdb": 11904
+      }
+    }
+  },
+  {
+    "type": "movie",
+    "score": 61.251957,
+    "movie": {
+      "title": "Sherlock Holmes 3",
+      "overview": "The upcoming sequel in the Sherlock Holmes franchise. Director Guy Ritchie returning for this film as well.",
+      "year": 2018,
+      "images": {
+        "poster": {
+          "full": null,
+          "medium": null,
+          "thumb": null
+        },
+        "fanart": {
+          "full": null,
+          "medium": null,
+          "thumb": null
+        }
+      },
+      "ids": {
+        "trakt": 191791,
+        "slug": "sherlock-holmes-3-2018",
+        "imdb": "tt2094116",
+        "tmdb": 297708
+      }
+    }
+  },
+  {
+    "type": "movie",
+    "score": 61.251957,
+    "movie": {
+      "title": "Sherlock Holmes Baffled",
+      "overview": "Sherlock Holmes enters his drawing room to find it being burgled, but on confronting the villain is surprised when the latter disappears.",
+      "year": 1900,
+      "images": {
+        "poster": {
+          "full": "https://walter.trakt.us/images/movies/000/122/128/posters/original/a7898c70ae.jpg",
+          "medium": "https://walter.trakt.us/images/movies/000/122/128/posters/medium/a7898c70ae.jpg",
+          "thumb": "https://walter.trakt.us/images/movies/000/122/128/posters/thumb/a7898c70ae.jpg"
+        },
+        "fanart": {
+          "full": null,
+          "medium": null,
+          "thumb": null
+        }
+      },
+      "ids": {
+        "trakt": 122128,
+        "slug": "sherlock-holmes-baffled-1900",
+        "imdb": "tt0291476",
+        "tmdb": 195620
+      }
+    }
+  },
+  {
+    "type": "movie",
+    "score": 61.251957,
+    "movie": {
+      "title": "Sherlock Holmes nevében",
+      "year": 2012,
+      "images": {
+        "poster": {
+          "full": "https://walter.trakt.us/images/movies/000/108/262/posters/original/399ffed4af.jpg",
+          "medium": "https://walter.trakt.us/images/movies/000/108/262/posters/medium/399ffed4af.jpg",
+          "thumb": "https://walter.trakt.us/images/movies/000/108/262/posters/thumb/399ffed4af.jpg"
+        },
+        "fanart": {
+          "full": "https://walter.trakt.us/images/movies/000/108/262/fanarts/original/39cddb1553.jpg",
+          "medium": "https://walter.trakt.us/images/movies/000/108/262/fanarts/medium/39cddb1553.jpg",
+          "thumb": "https://walter.trakt.us/images/movies/000/108/262/fanarts/thumb/39cddb1553.jpg"
+        }
+      },
+      "ids": {
+        "trakt": 108262,
+        "slug": "sherlock-holmes-neveben-2012",
+        "imdb": "tt2070701",
+        "tmdb": 169724
+      }
+    }
+  },
+  {
+    "type": "movie",
+    "score": 61.251957,
+    "movie": {
+      "title": "Sherlock Holmes Returns",
+      "overview": "Sherlock Holmes is awakened in modern times with a tale that he had invented a method of suspended animation that he had utilized on himself. Awakened by an earthquake, he is helped by Amy Winslow, who lives at 1994 Baker Street in San Francisco. There he is joined by a new group of Baker Street Irregulars led by Zapper. His battles lead him to the evil Moriarty clan led by James Moriarty Booth.",
+      "year": 1993,
+      "images": {
+        "poster": {
+          "full": "https://walter.trakt.us/images/movies/000/097/884/posters/original/ddd540ef80.jpg",
+          "medium": "https://walter.trakt.us/images/movies/000/097/884/posters/medium/ddd540ef80.jpg",
+          "thumb": "https://walter.trakt.us/images/movies/000/097/884/posters/thumb/ddd540ef80.jpg"
+        },
+        "fanart": {
+          "full": null,
+          "medium": null,
+          "thumb": null
+        }
+      },
+      "ids": {
+        "trakt": 97884,
+        "slug": "sherlock-holmes-returns-1993",
+        "imdb": "tt0108117",
+        "tmdb": 148281
+      }
+    }
+  },
+  {
+    "type": "movie",
+    "score": 61.251957,
+    "movie": {
+      "title": "Sherlock: Undercover Dog",
+      "overview": "Billy, 10, a dreamer, wants to be taken seriously so he can live with his toy-designer father on Catalina Island. Billy's plans get seriously spoilt when Sherlock, a talking police dog, demands his help to rescue his police detective handler kidnaped by smugglers. But Sherlock likes to keep his talking a closely-guarded secret. So now no one will take Billy seriously until he rescues the kidnaped detective and catches the smugglers...",
+      "year": 1994,
+      "images": {
+        "poster": {
+          "full": "https://walter.trakt.us/images/movies/000/044/385/posters/original/ccf4b68470.jpg",
+          "medium": "https://walter.trakt.us/images/movies/000/044/385/posters/medium/ccf4b68470.jpg",
+          "thumb": "https://walter.trakt.us/images/movies/000/044/385/posters/thumb/ccf4b68470.jpg"
+        },
+        "fanart": {
+          "full": "https://walter.trakt.us/images/movies/000/044/385/fanarts/original/70a0bb3ef3.jpg",
+          "medium": "https://walter.trakt.us/images/movies/000/044/385/fanarts/medium/70a0bb3ef3.jpg",
+          "thumb": "https://walter.trakt.us/images/movies/000/044/385/fanarts/thumb/70a0bb3ef3.jpg"
+        }
+      },
+      "ids": {
+        "trakt": 44385,
+        "slug": "sherlock-undercover-dog-1994",
+        "imdb": "tt0111168",
+        "tmdb": 61842
+      }
+    }
+  },
+  {
+    "type": "movie",
+    "score": 61.251957,
+    "movie": {
+      "title": "Sherlock de Araque",
+      "year": 1957,
+      "images": {
+        "poster": {
+          "full": null,
+          "medium": null,
+          "thumb": null
+        },
+        "fanart": {
+          "full": null,
+          "medium": null,
+          "thumb": null
+        }
+      },
+      "ids": {
+        "trakt": 153768,
+        "slug": "sherlock-de-araque-1957",
+        "imdb": "tt0194367",
+        "tmdb": 253191
+      }
+    }
+  },
+  {
+    "type": "movie",
+    "score": 53.595463,
+    "movie": {
+      "title": "Sherlock: The Abominable Bride",
+      "overview": "Sherlock Holmes and Doctor Watson investigate a mysterious ghostly bride.  We've been here before - but what if this wasn't the modern day but the late Victorian period? What if the world's most famous consulting detective and his best friend lived in a Baker Street of steam trains, hansom cabs, top hats and frock coats? Welcome to Sherlock in 1895!",
+      "year": 2016,
+      "images": {
+        "poster": {
+          "full": "https://walter.trakt.us/images/movies/000/224/175/posters/original/a4e6041381.jpg",
+          "medium": "https://walter.trakt.us/images/movies/000/224/175/posters/medium/a4e6041381.jpg",
+          "thumb": "https://walter.trakt.us/images/movies/000/224/175/posters/thumb/a4e6041381.jpg"
+        },
+        "fanart": {
+          "full": "https://walter.trakt.us/images/movies/000/224/175/fanarts/original/77e8605126.jpg",
+          "medium": "https://walter.trakt.us/images/movies/000/224/175/fanarts/medium/77e8605126.jpg",
+          "thumb": "https://walter.trakt.us/images/movies/000/224/175/fanarts/thumb/77e8605126.jpg"
+        }
+      },
+      "ids": {
+        "trakt": 224175,
+        "slug": "sherlock-the-abominable-bride-2016",
+        "imdb": "tt3845232",
+        "tmdb": 370646
+      }
+    }
+  }
+]

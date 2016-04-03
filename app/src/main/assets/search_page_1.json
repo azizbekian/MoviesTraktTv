@@ -1,0 +1,272 @@
+[
+  {
+    "type": "movie",
+    "score": 76.56506,
+    "movie": {
+      "title": "Sherlock Holmes",
+      "overview": "Eccentric consulting detective Sherlock Holmes and Doctor John Watson battle to bring down a new nemesis and unravel a deadly plot that could destroy England.",
+      "year": 2009,
+      "images": {
+        "poster": {
+          "full": "https://walter.trakt.us/images/movies/000/005/706/posters/original/c19f6c8397.jpg",
+          "medium": "https://walter.trakt.us/images/movies/000/005/706/posters/medium/c19f6c8397.jpg",
+          "thumb": "https://walter.trakt.us/images/movies/000/005/706/posters/thumb/c19f6c8397.jpg"
+        },
+        "fanart": {
+          "full": "https://walter.trakt.us/images/movies/000/005/706/fanarts/original/ec3a0b98ce.jpg",
+          "medium": "https://walter.trakt.us/images/movies/000/005/706/fanarts/medium/ec3a0b98ce.jpg",
+          "thumb": "https://walter.trakt.us/images/movies/000/005/706/fanarts/thumb/ec3a0b98ce.jpg"
+        }
+      },
+      "ids": {
+        "trakt": 5706,
+        "slug": "sherlock-holmes-2009",
+        "imdb": "tt0988045",
+        "tmdb": 10528
+      }
+    }
+  },
+  {
+    "type": "movie",
+    "score": 76.56506,
+    "movie": {
+      "title": "Sherlock Holmes",
+      "overview": "Sherlock Holmes is called upon to deal with a serial killer.",
+      "year": 2011,
+      "images": {
+        "poster": {
+          "full": null,
+          "medium": null,
+          "thumb": null
+        },
+        "fanart": {
+          "full": null,
+          "medium": null,
+          "thumb": null
+        }
+      },
+      "ids": {
+        "trakt": 217219,
+        "slug": "sherlock-holmes-2011",
+        "imdb": "tt2304901",
+        "tmdb": 336567
+      }
+    }
+  },
+  {
+    "type": "movie",
+    "score": 76.56506,
+    "movie": {
+      "title": "Sherlock Holmes",
+      "overview": "Sherlock Holmes and Watson are on the trail of a criminal and scientific mastermind who seems to control monsters and creations which defy belief.",
+      "year": 2010,
+      "images": {
+        "poster": {
+          "full": "https://walter.trakt.us/images/movies/000/021/507/posters/original/87db4c45c6.jpg",
+          "medium": "https://walter.trakt.us/images/movies/000/021/507/posters/medium/87db4c45c6.jpg",
+          "thumb": "https://walter.trakt.us/images/movies/000/021/507/posters/thumb/87db4c45c6.jpg"
+        },
+        "fanart": {
+          "full": "https://walter.trakt.us/images/movies/000/021/507/fanarts/original/0c62846e41.jpg",
+          "medium": "https://walter.trakt.us/images/movies/000/021/507/fanarts/medium/0c62846e41.jpg",
+          "thumb": "https://walter.trakt.us/images/movies/000/021/507/fanarts/thumb/0c62846e41.jpg"
+        }
+      },
+      "ids": {
+        "trakt": 21507,
+        "slug": "sherlock-holmes-2010",
+        "imdb": "tt1522835",
+        "tmdb": 33555
+      }
+    }
+  },
+  {
+    "type": "movie",
+    "score": 76.56506,
+    "movie": {
+      "title": "Sherlock, Jr.",
+      "overview": "A film projectionist longs to be a detective, and puts his meagre skills to work when he is framed by a rival for stealing his girlfriend's father's pocketwatch.",
+      "year": 1924,
+      "images": {
+        "poster": {
+          "full": "https://walter.trakt.us/images/movies/000/000/822/posters/original/f6da18e83b.jpg",
+          "medium": "https://walter.trakt.us/images/movies/000/000/822/posters/medium/f6da18e83b.jpg",
+          "thumb": "https://walter.trakt.us/images/movies/000/000/822/posters/thumb/f6da18e83b.jpg"
+        },
+        "fanart": {
+          "full": "https://walter.trakt.us/images/movies/000/000/822/fanarts/original/06116567af.jpg",
+          "medium": "https://walter.trakt.us/images/movies/000/000/822/fanarts/medium/06116567af.jpg",
+          "thumb": "https://walter.trakt.us/images/movies/000/000/822/fanarts/thumb/06116567af.jpg"
+        }
+      },
+      "ids": {
+        "trakt": 822,
+        "slug": "sherlock-jr-1924",
+        "imdb": "tt0015324",
+        "tmdb": 992
+      }
+    }
+  },
+  {
+    "type": "movie",
+    "score": 76.56506,
+    "movie": {
+      "title": "Unlocking Sherlock",
+      "overview": "UNLOCKING SHERLOCK, a one-hour special that explores how writers Steven Moffat and Mark Gatiss created the hit television sensation.  UNLOCKING Sherlock takes viewers on a personal voyage through the versions of Holmes that have served as inspirations for the new series - the original stories, their factual origins, hundreds of film adaptations - to arrive at their thoroughly modern Sherlock. Moffat and Gatiss explain the challenges they encountered adapting the original adventures of the iconic super-sleuth. The special goes behind the scenes on the set of the hit television series, and includes interviews with actors Benedict Cumberbatch, Martin Freeman and Lara Pulver, who talk about the reinvention of their fictional characters.",
+      "year": 2014,
+      "images": {
+        "poster": {
+          "full": "https://walter.trakt.us/images/movies/000/154/175/posters/original/e62888368f.jpg",
+          "medium": "https://walter.trakt.us/images/movies/000/154/175/posters/medium/e62888368f.jpg",
+          "thumb": "https://walter.trakt.us/images/movies/000/154/175/posters/thumb/e62888368f.jpg"
+        },
+        "fanart": {
+          "full": null,
+          "medium": null,
+          "thumb": null
+        }
+      },
+      "ids": {
+        "trakt": 154175,
+        "slug": "unlocking-sherlock-2014",
+        "imdb": "tt3711030",
+        "tmdb": 253675
+      }
+    }
+  },
+  {
+    "type": "movie",
+    "score": 76.56506,
+    "movie": {
+      "title": "Sherlock Holmes",
+      "overview": "Starring John Barrymore as Holmes and Roland Young as Watson the film was believed lost for decades. Much of the film finally resurfaced in the mid-1970s and was restored by the George Eastman House from rolls of negatives to the extent that it could be printed and screened. The movie features William Powell's first screen appearance.",
+      "year": 1922,
+      "images": {
+        "poster": {
+          "full": "https://walter.trakt.us/images/movies/000/038/070/posters/original/2135e98359.jpg",
+          "medium": "https://walter.trakt.us/images/movies/000/038/070/posters/medium/2135e98359.jpg",
+          "thumb": "https://walter.trakt.us/images/movies/000/038/070/posters/thumb/2135e98359.jpg"
+        },
+        "fanart": {
+          "full": null,
+          "medium": null,
+          "thumb": null
+        }
+      },
+      "ids": {
+        "trakt": 38070,
+        "slug": "sherlock-holmes-1922",
+        "imdb": "tt0013597",
+        "tmdb": 53800
+      }
+    }
+  },
+  {
+    "type": "movie",
+    "score": 76.56506,
+    "movie": {
+      "title": "Hercule & Sherlock",
+      "overview": "A story of two dogs which can find false money end two mafioso losers. One tries to be a tough guy and the other eats only pizza and listens to zen music, but both are totally terrified by dogs.",
+      "year": 1996,
+      "images": {
+        "poster": {
+          "full": "https://walter.trakt.us/images/movies/000/073/646/posters/original/f4521e08fb.jpg",
+          "medium": "https://walter.trakt.us/images/movies/000/073/646/posters/medium/f4521e08fb.jpg",
+          "thumb": "https://walter.trakt.us/images/movies/000/073/646/posters/thumb/f4521e08fb.jpg"
+        },
+        "fanart": {
+          "full": "https://walter.trakt.us/images/movies/000/073/646/fanarts/original/dadb3d77f6.jpg",
+          "medium": "https://walter.trakt.us/images/movies/000/073/646/fanarts/medium/dadb3d77f6.jpg",
+          "thumb": "https://walter.trakt.us/images/movies/000/073/646/fanarts/thumb/dadb3d77f6.jpg"
+        }
+      },
+      "ids": {
+        "trakt": 73646,
+        "slug": "hercule-sherlock-1996",
+        "imdb": "tt0116520",
+        "tmdb": 103029
+      }
+    }
+  },
+  {
+    "type": "movie",
+    "score": 76.56506,
+    "movie": {
+      "title": "Sherlock Holmes",
+      "overview": "Moriarty is sentenced to death, and Sherlock Holmes prepares to retire to the country and marry his girl (sic). But Moriarty has sworn that Holmes, Lt-Col Gore-King of Scotland Yard, and his trial judge shall all be hanged too. When Moriarty escapes and proceeds to put his threat into operation, Holmes has to postpone his retirement.",
+      "year": 1932,
+      "images": {
+        "poster": {
+          "full": "https://walter.trakt.us/images/movies/000/105/131/posters/original/5f7f0067f5.jpg",
+          "medium": "https://walter.trakt.us/images/movies/000/105/131/posters/medium/5f7f0067f5.jpg",
+          "thumb": "https://walter.trakt.us/images/movies/000/105/131/posters/thumb/5f7f0067f5.jpg"
+        },
+        "fanart": {
+          "full": null,
+          "medium": null,
+          "thumb": null
+        }
+      },
+      "ids": {
+        "trakt": 105131,
+        "slug": "sherlock-holmes-1932",
+        "imdb": "tt0023460",
+        "tmdb": 163171
+      }
+    }
+  },
+  {
+    "type": "movie",
+    "score": 76.56506,
+    "movie": {
+      "title": "Young Sherlocks",
+      "overview": "The Mystic J.J.J.'s challenge Ernie's bravery; he spins a tale of saving a rich young girl from kidnappers and of creating a utopia called Freetown.",
+      "year": 1922,
+      "images": {
+        "poster": {
+          "full": "https://walter.trakt.us/images/movies/000/111/428/posters/original/958f33dbf3.jpg",
+          "medium": "https://walter.trakt.us/images/movies/000/111/428/posters/medium/958f33dbf3.jpg",
+          "thumb": "https://walter.trakt.us/images/movies/000/111/428/posters/thumb/958f33dbf3.jpg"
+        },
+        "fanart": {
+          "full": null,
+          "medium": null,
+          "thumb": null
+        }
+      },
+      "ids": {
+        "trakt": 111428,
+        "slug": "young-sherlocks-1922",
+        "imdb": "tt0013803",
+        "tmdb": 175569
+      }
+    }
+  },
+  {
+    "type": "movie",
+    "score": 76.56506,
+    "movie": {
+      "title": "Sherlock Holmes",
+      "overview": "An adaptation of William Gillette's play about the great Detective, Sherlock Holmes.",
+      "year": 1981,
+      "images": {
+        "poster": {
+          "full": "https://walter.trakt.us/images/movies/000/182/153/posters/original/af27ffd67d.jpg",
+          "medium": "https://walter.trakt.us/images/movies/000/182/153/posters/medium/af27ffd67d.jpg",
+          "thumb": "https://walter.trakt.us/images/movies/000/182/153/posters/thumb/af27ffd67d.jpg"
+        },
+        "fanart": {
+          "full": null,
+          "medium": null,
+          "thumb": null
+        }
+      },
+      "ids": {
+        "trakt": 182153,
+        "slug": "sherlock-holmes-1981",
+        "imdb": "",
+        "tmdb": 284942
+      }
+    }
+  }
+]

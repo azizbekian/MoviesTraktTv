@@ -1,0 +1,60 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.1.0-alpha4'
+        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
+        classpath 'me.tatarka:gradle-retrolambda:3.2.5'
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+allprojects {
+    repositories {
+        jcenter()
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+
+ext {
+    minSdk = 16
+    targetSdk = 23
+    buildToolsVersion = '23.0.2'
+    compileSdkVersion = 23
+
+    applicationId = "com.azizbekian.example"
+    versionCode = 1
+    versionName = "1.0"
+
+    // Libraries
+    appcompat7Version = '23.2.1'
+    supportAnnotations = '23.2.1'
+    recyclerviewVersion = '23.2.1'
+    cardviewVersion = '23.2.1'
+    designVersion = '23.2.1'
+
+    butterknifeVersion = '7.0.1'
+    retrofitVersion = '2.0.0-beta4'
+    gsonConverterVersion = '2.0.0-beta3'
+    picassoVersion = '2.5.2'
+    okhttpVersion ='3.2.0'
+    okhttpInterceptorVersion ='3.0.1'
+    rxjavaVersion = '1.1.1'
+    rxandroidVersion = '1.1.0'
+    rxjavaRetrofitAdapter = '2.0.0-beta4'
+    dagger2Version = '2.0.1'
+    javaxAnnotation = '1.2'
+    eventBusVersion = '2.4.1'
+    rxbindingVersion = '0.4.0'
+    leakCanaryVersion = '1.3.1'
+
+    junitVersion = '4.12'
+}

@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">Movies</string>
+
+    <string name="title.imdb">IMDB</string>
+    <string name="title.trailer">TRAILER</string>
+    <string name="title.popular_movies">Popular movies</string>
+    <string name="title.year_produced">Year produced</string>
+    <string name="title.rating">Rating</string>
+
+    <string name="error.connection">Connection error. Check your internet connection.</string>
+    <string name="error.try_again">Try again</string>
+    <string name="error.retry">Retry</string>
+    <string name="error.no_internet">No internet connection</string>
+
+    <string name="message.no_movies">No movies to show</string>
+    <string name="message.went_wrong">Something went wrong</string>
+    <string name="message.no_search_result">No movies found</string>
+
+    <string name="description.movie_cover">movie cover photo</string>
+
+    <string name="transition_title" translatable="false">transition_name</string>
+    <string name="transition_overview" translatable="false">transition_overview</string>
+    <string name="transition_cover" translatable="false">transition_cover</string>
+
+</resources>

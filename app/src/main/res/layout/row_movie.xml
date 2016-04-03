@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/card_view"
+    style="@style/MovieCard">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/movie_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/touchable_background_white"
+            android:clickable="true"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                style="@style/CardContent"
+                android:padding="@dimen/card_padding">
+
+                <ImageView
+                    android:id="@+id/movie_cover"
+                    android:layout_width="@dimen/cover_photo_width"
+                    android:layout_height="@dimen/cover_photo_height"
+                    android:layout_marginEnd="@dimen/spacing_smaller"
+                    android:layout_marginRight="@dimen/spacing_smaller"
+                    android:adjustViewBounds="true"
+                    android:contentDescription="@string/description.movie_cover" />
+
+                <TextView
+                    android:id="@+id/movie_title"
+                    style="@style/MovieTitle"
+                    android:layout_marginBottom="@dimen/spacing_smaller"
+                    android:layout_toEndOf="@id/movie_cover"
+                    android:layout_toRightOf="@id/movie_cover"
+                    tools:text="The Dark Knight" />
+
+                <TextView
+                    android:id="@+id/movie_overview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/movie_title"
+                    android:layout_toEndOf="@id/movie_cover"
+                    android:layout_toRightOf="@id/movie_cover"
+                    android:textColor="@color/grey700"
+                    tools:text="overview text" />
+            </RelativeLayout>
+
+            <View
+                style="@style/Divider"
+                android:layout_marginTop="5dp" />
+
+            <LinearLayout
+                style="@style/CardContent"
+                android:layout_height="@dimen/card_secondary_menu_height"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center"
+                    android:text="@string/title.year_produced"
+                    android:textColor="@color/grey500"
+                    android:textSize="@dimen/font_large"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/movie_year"
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:textColor="@color/orange500"
+                    android:textStyle="bold"
+                    tools:text="1992" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="@dimen/spacing_smaller"
+                    android:layout_marginRight="@dimen/spacing_smaller"
+                    android:gravity="center"
+                    android:text="@string/title.rating"
+                    android:textColor="@color/grey500"
+                    android:textSize="@dimen/font_large"
+                    android:textStyle="bold" />
+
+
+                <TextView
+                    android:id="@+id/movie_rating"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:textColor="@color/orange700"
+                    android:textStyle="bold"
+                    tools:text="6.75" />
+            </LinearLayout>
+
+            <View
+                android:id="@+id/movie_lower_divider"
+                style="@style/Divider" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/movie_lower_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:gravity="end"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/movie_imdb"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/touchable_background_white"
+                android:padding="@dimen/spacing_normal"
+                android:text="@string/title.imdb"
+                android:textColor="@color/black"
+                android:textSize="@dimen/font_normal"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/movie_trailer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/touchable_background_white"
+                android:padding="@dimen/spacing_normal"
+                android:text="@string/title.trailer"
+                android:textColor="@color/deepOrangeA700"
+                android:textSize="@dimen/font_normal"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>
