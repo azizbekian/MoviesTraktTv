@@ -289,6 +289,7 @@ public class MainFragment extends BaseFragment {
     public void onEvent(ConnectivityChangeEvent ev) {
         if ((mPageCounter == 1 || mBottomReachedListener.isLoading()) && ConnectivityUtils.isNetworkAvailable(getActivity())) {
             if (null != snackbar) snackbar.dismiss();
+            sMode = IDLE;
             loadMovies();
         }
     }
