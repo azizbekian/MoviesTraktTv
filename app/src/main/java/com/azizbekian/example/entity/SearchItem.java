@@ -23,7 +23,7 @@ public class SearchItem {
         public Images images;
 
         public String getImdb() {
-            return null != ids ? ids.imdb : "";
+            return null != ids ? ids.imdb : null;
         }
 
         public String getThumb() {
@@ -32,6 +32,13 @@ public class SearchItem {
 
         public static class Ids {
             String imdb;
+
+            @Override
+            public String toString() {
+                return "Ids{" +
+                        "imdb='" + imdb + '\'' +
+                        '}';
+            }
         }
 
         public static class Images {
@@ -39,6 +46,20 @@ public class SearchItem {
 
             public static class Poster {
                 String thumb;
+
+                @Override
+                public String toString() {
+                    return "Poster{" +
+                            "thumb='" + thumb + '\'' +
+                            '}';
+                }
+            }
+
+            @Override
+            public String toString() {
+                return "Images{" +
+                        "poster=" + poster +
+                        '}';
             }
         }
 

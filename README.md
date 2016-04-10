@@ -22,7 +22,7 @@ The app uses a number of open source projects to work properly:
 
 ### Before running
 
-You need to put your TraktTv API key in `TraktTvApi.java` to communicate with server. If you do not have key, you can view typical JSON responses in assets.
+You need to put your TraktTv API key in `Constants.java` to communicate with server. If you do not have key, you can view typical JSON responses in assets.
 
 
    [Butterknife]: <http://jakewharton.github.io/butterknife/>

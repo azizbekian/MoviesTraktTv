@@ -23,10 +23,11 @@ public class DefaultExclusionStrategy implements ExclusionStrategy {
 
     @Override
     public boolean shouldSkipField(FieldAttributes f) {
-        return (f.getDeclaringClass() == SearchItem.Movie.Images.Poster.class && !f.getName().equals("thumb"))
-                || (f.getDeclaringClass() == SearchItem.Movie.Ids.class && !f.getName().equals("imdb"))
-                || (f.getDeclaringClass() == SearchItem.Movie.Images.class && !f.getName().equals("poster"))
-                || (f.getDeclaringClass() == SearchItem.Movie.class && !(f.getName().equals("title") || f.getName().equals("year") || f.getName().equals("overview") || f.getName().equals("trailer") || f.getName().equals("rating") || f.getName().equals("ids") || f.getName().equals("images")));
+        String name = f.getName();
+        return (f.getDeclaringClass() == SearchItem.Movie.Images.Poster.class && !name.equals("thumb"))
+                || (f.getDeclaringClass() == SearchItem.Movie.Ids.class && !name.equals("imdb"))
+                || (f.getDeclaringClass() == SearchItem.Movie.Images.class && !name.equals("poster"))
+                || (f.getDeclaringClass() == SearchItem.Movie.class && !(name.equals("title") || name.equals("year") || name.equals("overview") || name.equals("trailer") || name.equals("rating") || name.equals("ids") || name.equals("images")));
     }
 
     @Override

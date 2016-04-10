@@ -12,6 +12,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -79,7 +80,7 @@ public class MainFragment extends BaseFragment {
 
     private static final int IDLE = 0;
     private static final int FETCHING = 1;
-    private static int sMode = IDLE;
+    private static int mode = IDLE;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -134,7 +135,7 @@ public class MainFragment extends BaseFragment {
                 mSearchHelper = new SearchHelper(this, getAppComponent().getSearchApi());
             addSubscription(mSearchHelper.onSearchTextChange(RxSearchView.queryTextChanges(searchView)
                     .debounce(400, MILLISECONDS)
-                    .filter(charSequence -> charSequence != null && charSequence.length() > 0)));
+                    .filter(charSequence -> !TextUtils.isEmpty(charSequence))));
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -180,13 +181,13 @@ public class MainFragment extends BaseFragment {
      */
     private void loadMovies() {
         // if the content is being loaded - ignore this request
-        if (sMode == IDLE) {
+        if (mode == IDLE) {
             final boolean isAdapterEmpty = mMovieAdapter.isEmpty();
             // needed for correctly showing footer view
-            if (!isAdapterEmpty) sMode = FETCHING;
+            if (!isAdapterEmpty) setMode(true);
 
             if (ConnectivityUtils.isNetworkAvailable(getActivity())) {
-                sMode = isAdapterEmpty ? IDLE : FETCHING;
+                setMode(!isAdapterEmpty);
                 if (isAdapterEmpty) toggleProgressBar(true);
 
                 unsubscribeAll();
@@ -198,13 +199,13 @@ public class MainFragment extends BaseFragment {
 
                             @Override
                             public void onError(Throwable e) {
-                                sMode = IDLE;
+                                setMode(false);
                                 showSnackbar(false);
                             }
 
                             @Override
                             public void onNext(List<SearchItem.Movie> movies) {
-                                sMode = IDLE;
+                                setMode(false);
                                 if (isAdapterEmpty) toggleProgressBar(false);
 
                                 // successfully downloaded, can increment paging
@@ -219,6 +220,10 @@ public class MainFragment extends BaseFragment {
                 showSnackbar(true);
             }
         }
+    }
+
+    private void setMode(boolean isFetching) {
+        mode = isFetching ? FETCHING : IDLE;
     }
 
     /**
@@ -275,7 +280,7 @@ public class MainFragment extends BaseFragment {
      * @return true if data is being loaded, false otherwise.
      */
     public boolean isContentLoading() {
-        return sMode == FETCHING;
+        return mode == FETCHING;
     }
 
     /**
@@ -289,7 +294,7 @@ public class MainFragment extends BaseFragment {
     public void onEvent(ConnectivityChangeEvent ev) {
         if ((mPageCounter == 1 || mBottomReachedListener.isLoading()) && ConnectivityUtils.isNetworkAvailable(getActivity())) {
             if (null != snackbar) snackbar.dismiss();
-            sMode = IDLE;
+            setMode(false);
             loadMovies();
         }
     }

@@ -2,6 +2,7 @@ package com.azizbekian.example.injection;
 
 import android.content.Context;
 
+import com.azizbekian.example.BuildConfig;
 import com.azizbekian.example.entity.SearchItem;
 import com.azizbekian.example.misc.Constants;
 import com.azizbekian.example.misc.DefaultExclusionStrategy;
@@ -18,8 +19,8 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import com.azizbekian.example.BuildConfig;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.GsonConverterFactory;
 import retrofit2.Retrofit;
@@ -68,13 +69,7 @@ public class AppModule {
                 .setExclusionStrategies(new DefaultExclusionStrategy(classesToRemain))
                 .create();
 
-        OkHttpClient client;
-        if (BuildConfig.DEBUG) {
-            HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-            interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-            client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
-        } else client = new OkHttpClient();
-
+        OkHttpClient client = createOkHttpClient();
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(Constants.ENDPOINT_API)
@@ -94,9 +89,10 @@ public class AppModule {
             add(List.class);
             add(SearchItem.class);
             add(String.class);
+            add(SearchItem.Movie.class);
             add(SearchItem.Movie.Images.class);
             add(SearchItem.Movie.Images.Poster.class);
-            add(SearchItem.Movie.class);
+            add(SearchItem.Movie.Ids.class);
         }};
 
         Gson gson = new GsonBuilder()
@@ -104,13 +100,7 @@ public class AppModule {
                 .setExclusionStrategies(new SearchExclusionStrategy(classesToRemain))
                 .create();
 
-        OkHttpClient client;
-        if (BuildConfig.DEBUG) {
-            HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-            interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-            client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
-        } else client = new OkHttpClient();
-
+        OkHttpClient client = createOkHttpClient();
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(Constants.ENDPOINT_API)
@@ -119,5 +109,26 @@ public class AppModule {
                 .build();
 
         return retrofit.create(TraktTvApi.Search.class);
+    }
+
+
+    private OkHttpClient createOkHttpClient() {
+        OkHttpClient client;
+
+        OkHttpClient.Builder builder = new OkHttpClient.Builder().addInterceptor(chain -> {
+            Request request = chain.request();
+            Request newRequest;
+            newRequest = request.newBuilder().addHeader(TraktTvApi.KEY_TRAKT_API_KEY, Constants.TRAKT_API_KEY).build();
+
+            return chain.proceed(newRequest);
+        });
+
+        if (BuildConfig.DEBUG) {
+            HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+            interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+            client = builder.addInterceptor(interceptor).build();
+        } else client = builder.build();
+
+        return client;
     }
 }

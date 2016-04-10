@@ -3,6 +3,7 @@ package com.azizbekian.example.adapter;
 import android.os.Bundle;
 import android.support.v4.util.Pair;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -107,6 +108,8 @@ public class SearchAdapter extends HeaderFooterRecyclerViewAdapter {
         mPicasso.load(searchItem.movie.getThumb()).error(R.drawable.placeholder).placeholder(R.drawable.placeholder).into(searchItemHolder.movieCover);
 
         searchItemHolder.searchContainer.setOnClickListener(v -> {
+
+            Log.i("vvv", searchItem.movie.toString());
             Bundle bundle = new Bundle();
             bundle.putParcelable(DetailMovieFragment.TAG_MOVIE, searchItem.movie);
             if (AndroidVersionUtils.isHigherEqualToLollipop()) {

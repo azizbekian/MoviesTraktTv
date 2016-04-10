@@ -19,6 +19,8 @@ import rx.Observable;
  */
 public interface TraktTvApi {
 
+    String KEY_TRAKT_API_KEY = "trakt-api-key";
+
     interface Default {
 
         /**
@@ -29,7 +31,6 @@ public interface TraktTvApi {
          * @param extendType different type of responses are available, which provide from basic to full info about each movie.
          */
         @Headers({"Content-type: application/json",
-                "trakt-api-key: YOUR_API_KEY",
                 "trakt-api-version: 2"})
         @GET("/movies/popular")
         Observable<List<SearchItem.Movie>> getPopularMovies(@Query("page") int page, @Query("limit") int limit, @Query("extended") String extendType);
@@ -45,7 +46,6 @@ public interface TraktTvApi {
          * @param page  the number of page that needs to be brought
          */
         @Headers({"Content-type: application/json",
-                "trakt-api-key: YOUR_API_KEY",
                 "trakt-api-version: 2"})
         @GET("/search?")
         Call<List<SearchItem>> searchMovies(@Query("query") String query, @Query("type") String type, @Query("page") int page);

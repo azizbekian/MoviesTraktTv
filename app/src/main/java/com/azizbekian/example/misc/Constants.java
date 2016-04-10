@@ -13,6 +13,7 @@ public class Constants {
      * Server API endpoint.
      */
     public static final String ENDPOINT_API = "https://api-v2launch.trakt.tv";
+    public static final String TRAKT_API_KEY = "YOUR_API_KEY";
 
     /**
      * The movie count being shown in each paging.
