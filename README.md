@@ -4,7 +4,7 @@ This is a task/test app, that was given me from one of companies. Unfortunately,
 
 The app get's popular movies list via JSON from TraktTV API and display them. Additionally, search functionality is implemented and corner cases are handled. Uses transition animations upto SDK 16.
 
-<img src="screenshots/trakt_tv_demo.gif" width="400" align="right" hspace="20">
+<img src="screenshots/demo.gif" width="400" align="right" hspace="20">
 
 ### Tech
 
