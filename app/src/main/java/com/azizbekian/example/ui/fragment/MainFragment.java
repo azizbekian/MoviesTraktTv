@@ -113,7 +113,8 @@ public class MainFragment extends BaseFragment {
 
         MenuItem mSearchItem = menu.findItem(R.id.action_search);
         searchView = (SearchView) mSearchItem.getActionView();
-        MenuItemCompat.setOnActionExpandListener(mSearchItem, new MenuItemCompat.OnActionExpandListener() {
+        MenuItemCompat.setOnActionExpandListener(mSearchItem,
+                new MenuItemCompat.OnActionExpandListener() {
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
                 mSearchHelper.animateSearchView(false);
@@ -153,8 +154,11 @@ public class MainFragment extends BaseFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        ViewUtils.setupToolbar((AppCompatActivity) getActivity(), (Toolbar) view.findViewById(R.id.toolbar), getString(R.string.title_popular_movies), false);
-        progressBar.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(getContext(), R.color.lightGreen300), MULTIPLY);
+        ViewUtils.setupToolbar((AppCompatActivity) getActivity(),
+                (Toolbar) view.findViewById(R.id.toolbar),
+                getString(R.string.title_popular_movies), false);
+        progressBar.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(getContext(),
+                R.color.lightGreen300), MULTIPLY);
         setupRecyclerView();
         loadMovies();
     }
@@ -229,12 +233,16 @@ public class MainFragment extends BaseFragment {
     /**
      * Show {@link Snackbar} in exceptional conditions.
      *
-     * @param noInternet indicates, whether this {@code snackbar} is being show because of no internet connection. If true - no internet text would be show. Else - general error message.
+     * @param noInternet indicates, whether this {@code snackbar} is being show because of no
+     *                   internet connection. If true - no internet text would be show.
+     *                   Else - general error message.
      */
     public void showSnackbar(boolean noInternet) {
         snackbar = Snackbar
-                .make(coordinatorLayout, getString(R.string.error_no_internet), Snackbar.LENGTH_INDEFINITE)
-                .setAction(noInternet ? getString(R.string.error_retry).toUpperCase() : getString(R.string.message_went_wrong).toUpperCase(), view -> {
+                .make(coordinatorLayout, getString(R.string.error_no_internet),
+                        Snackbar.LENGTH_INDEFINITE)
+                .setAction(noInternet ? getString(R.string.error_retry).toUpperCase() :
+                        getString(R.string.message_went_wrong).toUpperCase(), view -> {
                     loadMovies();
                 });
 
@@ -261,7 +269,8 @@ public class MainFragment extends BaseFragment {
     /**
      * Control's {@code progressBar}'s visibility state.
      *
-     * @param show if true, sets {@code progressBar}'s visibility to {@code View.VISIBLE}, else - animates to {@code View.GONE}.
+     * @param show if true, sets {@code progressBar}'s visibility to {@code View.VISIBLE},
+     *             else - animates to {@code View.GONE}.
      */
     private void toggleProgressBar(boolean show) {
         if (!show) {
@@ -292,7 +301,8 @@ public class MainFragment extends BaseFragment {
      */
     @SuppressWarnings("unused")
     public void onEvent(ConnectivityChangeEvent ev) {
-        if ((mPageCounter == 1 || mBottomReachedListener.isLoading()) && ConnectivityUtils.isNetworkAvailable(getActivity())) {
+        if ((mPageCounter == 1 || mBottomReachedListener.isLoading())
+                && ConnectivityUtils.isNetworkAvailable(getActivity())) {
             if (null != snackbar) snackbar.dismiss();
             setMode(false);
             loadMovies();

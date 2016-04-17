@@ -36,7 +36,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         if (null == savedInstanceState) {
-            FragmentUtils.addRootFragment(this, R.id.content_frame, MainFragment.class, null, TAG_ROOT_FRAGMENT);
+            FragmentUtils.addRootFragment(this, R.id.content_frame, MainFragment.class, null,
+                    TAG_ROOT_FRAGMENT);
         }
     }
 

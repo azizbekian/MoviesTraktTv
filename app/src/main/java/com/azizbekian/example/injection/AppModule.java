@@ -118,7 +118,8 @@ public class AppModule {
         OkHttpClient.Builder builder = new OkHttpClient.Builder().addInterceptor(chain -> {
             Request request = chain.request();
             Request newRequest;
-            newRequest = request.newBuilder().addHeader(TraktTvApi.KEY_TRAKT_API_KEY, Constants.TRAKT_API_KEY).build();
+            newRequest = request.newBuilder().addHeader(TraktTvApi.KEY_TRAKT_API_KEY,
+                    Constants.TRAKT_API_KEY).build();
 
             return chain.proceed(newRequest);
         });

@@ -171,7 +171,8 @@ public class DetailMovieFragment extends Fragment {
         }
 
         if (null != cover)
-            picasso.load(cover).error(R.drawable.placeholder).placeholder(R.drawable.placeholder).into(movieCover);
+            picasso.load(cover).error(R.drawable.placeholder).placeholder(R.drawable.placeholder)
+                    .into(movieCover);
         else movieCover.setImageResource(R.drawable.placeholder);
     }
 

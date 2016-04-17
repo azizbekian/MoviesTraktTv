@@ -16,11 +16,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.azizbekian.example.R;
 import com.azizbekian.example.ui.fragment.DetailMovieFragment;
 import com.azizbekian.example.utils.AndroidVersionUtils;
 import com.azizbekian.example.utils.FragmentUtils;
-
-import com.azizbekian.example.R;
 
 import static com.azizbekian.example.misc.Constants.ANIM_DURATION_TRANSITION_NORMAL;
 
@@ -35,7 +34,8 @@ public class DetailMovieActivity extends AppCompatActivity {
     public static void launchActivity(Context context, Bundle bundle, Pair<View, String>[] pairs) {
         Intent intent = new Intent(context, DetailMovieActivity.class);
         intent.putExtras(bundle);
-        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation((MainActivity) context, pairs);
+        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                (MainActivity) context, pairs);
         context.startActivity(intent, options.toBundle());
     }
 
@@ -43,7 +43,8 @@ public class DetailMovieActivity extends AppCompatActivity {
         Bundle transitionBundle = new Bundle();
         int[] screenLocation = new int[2];
         imageView.getLocationOnScreen(screenLocation);
-        transitionBundle.putInt(DetailMovieFragment.KEY_ORIENTATION, fragment.getResources().getConfiguration().orientation);
+        transitionBundle.putInt(DetailMovieFragment.KEY_ORIENTATION, fragment.getResources()
+                .getConfiguration().orientation);
         transitionBundle.putInt(DetailMovieFragment.KEY_TOP, screenLocation[1]);
         transitionBundle.putInt(DetailMovieFragment.KEY_WIDTH, imageView.getWidth());
         transitionBundle.putInt(DetailMovieFragment.KEY_HEIGHT, imageView.getHeight());
@@ -65,7 +66,8 @@ public class DetailMovieActivity extends AppCompatActivity {
                 setupWindowAnimations();
                 setupLayout();
             } else {
-                FragmentUtils.addRootFragment(this, R.id.content_frame, DetailMovieFragment.class, getIntent().getExtras(), DetailMovieFragment.TAG);
+                FragmentUtils.addRootFragment(this, R.id.content_frame, DetailMovieFragment.class,
+                        getIntent().getExtras(), DetailMovieFragment.TAG);
             }
         }
     }
@@ -76,10 +78,12 @@ public class DetailMovieActivity extends AppCompatActivity {
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    @SuppressWarnings("all")
     private void setupLayout() {
         Slide slideTransition = new Slide(Gravity.LEFT);
         slideTransition.setDuration(ANIM_DURATION_TRANSITION_NORMAL);
-        Fragment fragment = Fragment.instantiate(this, DetailMovieFragment.class.getName(), getIntent().getExtras());
+        Fragment fragment = Fragment.instantiate(this, DetailMovieFragment.class.getName(),
+                getIntent().getExtras());
         fragment.setReenterTransition(slideTransition);
         fragment.setExitTransition(slideTransition);
         fragment.setSharedElementEnterTransition(new ChangeBounds());
@@ -107,7 +111,8 @@ public class DetailMovieActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        final DetailMovieFragment fragment = (DetailMovieFragment) getSupportFragmentManager().findFragmentByTag(DetailMovieFragment.TAG);
+        final DetailMovieFragment fragment = (DetailMovieFragment) getSupportFragmentManager()
+                .findFragmentByTag(DetailMovieFragment.TAG);
         if (null != fragment && fragment.isVisible()) {
             fragment.runExitAnimation(() -> {
                 getSupportFragmentManager().beginTransaction().detach(fragment).commit();

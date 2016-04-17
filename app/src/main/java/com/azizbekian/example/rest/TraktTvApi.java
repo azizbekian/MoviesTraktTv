@@ -11,7 +11,9 @@ import retrofit2.http.Query;
 import rx.Observable;
 
 /**
- * We have to use different {@link retrofit2.Retrofit} interfaces, because they use different {@link com.google.gson.ExclusionStrategy} and different {@link retrofit2.Retrofit} {@link retrofit2.CallAdapter}s.
+ * We have to use different {@link retrofit2.Retrofit} interfaces, because they use different
+ * {@link com.google.gson.ExclusionStrategy} and different {@link retrofit2.Retrofit}
+ * {@link retrofit2.CallAdapter}s.
  * <p>
  * Created on April 02, 2016.
  *
@@ -28,12 +30,15 @@ public interface TraktTvApi {
          *
          * @param page       the number of page that needs to be brought
          * @param limit      how many items does each page contain
-         * @param extendType different type of responses are available, which provide from basic to full info about each movie.
+         * @param extendType different type of responses are available, which provide from basic to
+         *                   full info about each movie.
          */
         @Headers({"Content-type: application/json",
                 "trakt-api-version: 2"})
         @GET("/movies/popular")
-        Observable<List<SearchItem.Movie>> getPopularMovies(@Query("page") int page, @Query("limit") int limit, @Query("extended") String extendType);
+        Observable<List<SearchItem.Movie>> getPopularMovies(@Query("page") int page,
+                                                            @Query("limit") int limit,
+                                                            @Query("extended") String extendType);
     }
 
     interface Search {
@@ -48,7 +53,8 @@ public interface TraktTvApi {
         @Headers({"Content-type: application/json",
                 "trakt-api-version: 2"})
         @GET("/search?")
-        Call<List<SearchItem>> searchMovies(@Query("query") String query, @Query("type") String type, @Query("page") int page);
+        Call<List<SearchItem>> searchMovies(@Query("query") String query, @Query("type") String type,
+                                            @Query("page") int page);
     }
 
 }

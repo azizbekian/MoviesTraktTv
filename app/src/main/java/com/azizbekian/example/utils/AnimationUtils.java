@@ -108,7 +108,9 @@ public class AnimationUtils {
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @SuppressWarnings("unchecked")
-    public static Pair<View, String>[] createSafeTransitionParticipants(@NonNull Activity activity, boolean includeStatusBar, @Nullable Pair... otherParticipants) {
+    public static Pair<View, String>[] createSafeTransitionParticipants(@NonNull Activity activity,
+                                                                        boolean includeStatusBar,
+                                                                        @Nullable Pair... otherParticipants) {
         View decor = activity.getWindow().getDecorView();
         View statusBar = null;
         if (includeStatusBar) {

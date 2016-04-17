@@ -18,8 +18,6 @@
 
     <string name="description.movie_cover">movie cover photo</string>
 
-    <string name="transition_title" translatable="false">transition_name</string>
-    <string name="transition_overview" translatable="false">transition_overview</string>
     <string name="transition_cover" translatable="false">transition_cover</string>
 
 </resources>

@@ -30,7 +30,9 @@ public class FragmentUtils {
      * @param fragmentBundle - This bundle gets supplied to the fragment
      * @param tag            - Fragment transaction's tag
      */
-    public static void addRootFragment(AppCompatActivity activity, @IdRes int frameResId, Class fragmentClass, @Nullable Bundle fragmentBundle, @Nullable String tag) {
+    public static void addRootFragment(AppCompatActivity activity, @IdRes int frameResId,
+                                       Class fragmentClass, @Nullable Bundle fragmentBundle,
+                                       @Nullable String tag) {
         FragmentTransaction ft = activity.getSupportFragmentManager().beginTransaction();
         ft.add(frameResId, Fragment.instantiate(activity, fragmentClass.getName(), fragmentBundle), tag);
         ft.commitAllowingStateLoss();
@@ -44,7 +46,8 @@ public class FragmentUtils {
      * @param fragment   - Fragment instance
      * @param tag        - Fragment transaction's tag
      */
-    public static void addRootFragment(AppCompatActivity activity, @IdRes int frameResId, Fragment fragment, @Nullable String tag) {
+    public static void addRootFragment(AppCompatActivity activity, @IdRes int frameResId,
+                                       Fragment fragment, @Nullable String tag) {
         FragmentTransaction ft = activity.getSupportFragmentManager().beginTransaction();
         ft.add(frameResId, fragment, tag);
         ft.commitAllowingStateLoss();
@@ -60,7 +63,8 @@ public class FragmentUtils {
      * @param addToBackStack - If true transaction would be added to back stack.
      * @param tag            - Fragment transaction's tag
      */
-    public static void replace(AppCompatActivity activity, @IdRes int frameResId, Class clazz, @Nullable Bundle fragmentBundle, boolean addToBackStack, @Nullable String tag) {
+    public static void replace(AppCompatActivity activity, @IdRes int frameResId, Class clazz,
+                               @Nullable Bundle fragmentBundle, boolean addToBackStack, @Nullable String tag) {
         FragmentTransaction ft = activity.getSupportFragmentManager().beginTransaction();
         ft.replace(frameResId, Fragment.instantiate(activity, clazz.getName(), fragmentBundle), tag);
         if (addToBackStack) ft.addToBackStack(null);
@@ -77,7 +81,8 @@ public class FragmentUtils {
      * @param addToBackStack - If true transaction would be added to back stack.
      * @param tag            - Fragment transaction's tag
      */
-    public static void replace(FragmentActivity activity, @IdRes int frameResId, Fragment fragment, boolean addToBackStack, @Nullable String tag) {
+    public static void replace(FragmentActivity activity, @IdRes int frameResId, Fragment fragment,
+                               boolean addToBackStack, @Nullable String tag) {
         FragmentTransaction ft = activity.getSupportFragmentManager().beginTransaction();
         ft.replace(frameResId, fragment, tag);
         if (addToBackStack) ft.addToBackStack(null);
@@ -95,7 +100,8 @@ public class FragmentUtils {
      * @param addToBackStack - If true transaction would be added to back stack.
      * @param tag            - Fragment transaction's tag
      */
-    public static void add(FragmentActivity activity, @IdRes int frameResId, Class clazz, @Nullable Bundle bundle, boolean addToBackStack, @Nullable String tag) {
+    public static void add(FragmentActivity activity, @IdRes int frameResId, Class clazz,
+                           @Nullable Bundle bundle, boolean addToBackStack, @Nullable String tag) {
         FragmentTransaction ft = activity.getSupportFragmentManager().beginTransaction();
         ft.add(frameResId, Fragment.instantiate(activity, clazz.getName(), bundle), tag);
         if (addToBackStack) ft.addToBackStack(null);
@@ -112,7 +118,8 @@ public class FragmentUtils {
      * @param addToBackStack - If true transaction would be added to back stack.
      * @param tag            - Fragment transaction's tag
      */
-    public static void add(FragmentActivity activity, @IdRes int frameResId, Fragment fragment, boolean addToBackStack, @Nullable String tag) {
+    public static void add(FragmentActivity activity, @IdRes int frameResId, Fragment fragment,
+                           boolean addToBackStack, @Nullable String tag) {
         FragmentTransaction ft = activity.getSupportFragmentManager().beginTransaction();
         ft.add(frameResId, fragment, tag);
         if (addToBackStack) ft.addToBackStack(null);

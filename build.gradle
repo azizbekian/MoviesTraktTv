@@ -27,12 +27,12 @@ task clean(type: Delete) {
 ext {
     minSdk = 16
     targetSdk = 23
-    buildToolsVersion = '23.0.2'
+    buildToolsVersion = '23.0.3'
     compileSdkVersion = 23
 
-    applicationId = "com.azizbekian.example"
-    versionCode = 1
-    versionName = "1.0"
+    applicationId = "com.azizbekian.movies"
+    versionCode = 2
+    versionName = "1.0.1"
 
     // Libraries
     appcompat7Version = '23.2.1'

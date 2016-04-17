@@ -21,11 +21,13 @@ public class BottomReachedScrollListener extends RecyclerView.OnScrollListener {
     private int previousTotal = 0;
     private boolean loading = true;
 
-    public BottomReachedScrollListener(LinearLayoutManager linearLayoutManager, IBottomReached iBottomReached) {
+    public BottomReachedScrollListener(LinearLayoutManager linearLayoutManager,
+                                       IBottomReached iBottomReached) {
         this(linearLayoutManager, iBottomReached, 5);
     }
 
-    public BottomReachedScrollListener(LinearLayoutManager linearLayoutManager, IBottomReached iBottomReached, int threshold) {
+    public BottomReachedScrollListener(LinearLayoutManager linearLayoutManager,
+                                       IBottomReached iBottomReached, int threshold) {
         this.linearLayoutManager = linearLayoutManager;
         this.iBottomReached = iBottomReached;
         VISIBLE_THRESHOLD = threshold;
@@ -62,7 +64,8 @@ public class BottomReachedScrollListener extends RecyclerView.OnScrollListener {
     }
 
     /**
-     * When the {@link java.util.List} that's being show via {@link RecyclerView}'s adapter is being entirely changed, this method should be called.
+     * When the {@link java.util.List} that's being show via {@link RecyclerView}'s adapter is being
+     * entirely changed, this method should be called.
      * When items are being added to the same {@link java.util.List}, no need to call this method.
      */
     public void reset() {

@@ -52,3 +52,5 @@ tmp
 *.lock
 *.lck
 com_crashlytics_export_strings.xml
+
+artwork

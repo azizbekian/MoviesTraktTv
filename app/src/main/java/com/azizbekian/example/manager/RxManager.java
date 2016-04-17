@@ -19,8 +19,10 @@ import static com.azizbekian.example.misc.Constants.EXTEND_TYPE_FULL_IMAGES;
  */
 public class RxManager {
 
-    public static Observable<List<SearchItem.Movie>> getPopularMovies(TraktTvApi.Default traktTvDefaultApi, int pageCounter) {
-        return traktTvDefaultApi.getPopularMovies(pageCounter, DEFAULT_MOVIE_LIMIT, EXTEND_TYPE_FULL_IMAGES)
+    public static Observable<List<SearchItem.Movie>> getPopularMovies(
+            TraktTvApi.Default traktTvDefaultApi, int pageCounter) {
+        return traktTvDefaultApi.getPopularMovies(pageCounter, DEFAULT_MOVIE_LIMIT,
+                EXTEND_TYPE_FULL_IMAGES)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }

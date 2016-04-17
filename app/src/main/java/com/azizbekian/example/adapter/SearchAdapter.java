@@ -31,13 +31,13 @@ import com.azizbekian.example.R;
 public class SearchAdapter extends HeaderFooterRecyclerViewAdapter {
 
     private SearchHelper mSearchHelper;
-    private MainFragment mHostFragment;
+    private MainFragment mFragment;
     private List<SearchItem> mData;
     private Picasso mPicasso;
 
     public SearchAdapter(SearchHelper searchHelper, MainFragment hostFragment, List<SearchItem> data, Picasso picasso) {
         mSearchHelper = searchHelper;
-        mHostFragment = hostFragment;
+        mFragment = hostFragment;
         mData = data;
         mPicasso = picasso;
     }
@@ -100,8 +100,12 @@ public class SearchAdapter extends HeaderFooterRecyclerViewAdapter {
 
     @Override
     protected void onBindContentItemViewHolder(RecyclerView.ViewHolder contentViewHolder, int position) {
+
         final SearchItemHolder searchItemHolder = (SearchItemHolder) contentViewHolder;
         final SearchItem searchItem = mData.get(position);
+
+        searchItemHolder.searchContainer.setOnClickListener(null);
+
         searchItemHolder.movieTitle.setText(searchItem.movie.title);
         searchItemHolder.movieOverview.setText(searchItem.movie.overview);
         searchItemHolder.movieYear.setText(searchItem.movie.year);
@@ -109,18 +113,15 @@ public class SearchAdapter extends HeaderFooterRecyclerViewAdapter {
 
         searchItemHolder.searchContainer.setOnClickListener(v -> {
 
-            Log.i("vvv", searchItem.movie.toString());
             Bundle bundle = new Bundle();
             bundle.putParcelable(DetailMovieFragment.TAG_MOVIE, searchItem.movie);
             if (AndroidVersionUtils.isHigherEqualToLollipop()) {
-                final Pair<View, String>[] pairs = AnimationUtils.createSafeTransitionParticipants(mHostFragment.getActivity(), false,
-                        new Pair<>(searchItemHolder.movieTitle, mHostFragment.getContext().getString(R.string.transition_title)),
-                        new Pair<>(searchItemHolder.movieOverview, mHostFragment.getContext().getString(R.string.transition_overview)),
-                        new Pair<>(searchItemHolder.movieCover, mHostFragment.getContext().getString(R.string.transition_cover)));
+                final Pair<View, String>[] pairs = AnimationUtils.createSafeTransitionParticipants(mFragment.getActivity(), false,
+                        new Pair<>(searchItemHolder.movieCover, mFragment.getContext().getString(R.string.transition_cover)));
 
-                DetailMovieActivity.launchActivity(mHostFragment.getContext(), bundle, pairs);
+                DetailMovieActivity.launchActivity(mFragment.getContext(), bundle, pairs);
             } else {
-                DetailMovieActivity.launchActivity(mHostFragment, bundle, searchItemHolder.movieCover);
+                DetailMovieActivity.launchActivity(mFragment, bundle, searchItemHolder.movieCover);
             }
         });
     }

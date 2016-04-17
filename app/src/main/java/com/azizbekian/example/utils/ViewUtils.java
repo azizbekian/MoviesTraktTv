@@ -19,7 +19,8 @@ public class ViewUtils {
      * @param toolbarTitle - title to be displayed
      * @param showHomeAsUp - boolean, indicating whether back arrow should be displayed
      */
-    public static void setupToolbar(AppCompatActivity activity, Toolbar toolbar, String toolbarTitle, boolean showHomeAsUp) {
+    public static void setupToolbar(AppCompatActivity activity, Toolbar toolbar, String toolbarTitle,
+                                    boolean showHomeAsUp) {
         activity.setSupportActionBar(toolbar);
         ActionBar actionBar = activity.getSupportActionBar();
         if (null != actionBar) {

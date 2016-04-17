@@ -23,7 +23,6 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-
 import static android.graphics.PorterDuff.Mode.MULTIPLY;
 import static com.azizbekian.example.ui.fragment.DetailMovieFragment.TAG_MOVIE;
 
@@ -34,12 +33,12 @@ import static com.azizbekian.example.ui.fragment.DetailMovieFragment.TAG_MOVIE;
  */
 public class MovieAdapter extends HeaderFooterRecyclerViewAdapter {
 
-    private MainFragment mHostFragment;
+    private MainFragment mFragment;
     private Picasso mPicasso;
     private List<SearchItem.Movie> mMovies;
 
     public MovieAdapter(MainFragment fragment, List<SearchItem.Movie> movies, Picasso picasso) {
-        mHostFragment = fragment;
+        mFragment = fragment;
         mMovies = movies;
         mPicasso = picasso;
     }
@@ -87,7 +86,7 @@ public class MovieAdapter extends HeaderFooterRecyclerViewAdapter {
 
     @Override
     protected void onBindFooterItemViewHolder(RecyclerView.ViewHolder footerViewHolder, int position) {
-        footerViewHolder.itemView.setVisibility(mHostFragment.isContentLoading() ? View.VISIBLE : View.GONE);
+        footerViewHolder.itemView.setVisibility(mFragment.isContentLoading() ? View.VISIBLE : View.GONE);
     }
 
     @Override
@@ -95,6 +94,11 @@ public class MovieAdapter extends HeaderFooterRecyclerViewAdapter {
 
         final SearchItem.Movie movie = mMovies.get(position);
         final MovieViewHolder movieHolder = (MovieViewHolder) contentViewHolder;
+
+        movieHolder.movieImdb.setOnClickListener(null);
+        movieHolder.movieTrailer.setOnClickListener(null);
+        movieHolder.movieContainer.setOnClickListener(null);
+
         movieHolder.movieTitle.setText(movie.title);
         movieHolder.movieOverview.setText(movie.overview);
         movieHolder.movieYear.setText(movie.year);
@@ -112,9 +116,11 @@ public class MovieAdapter extends HeaderFooterRecyclerViewAdapter {
             movieHolder.movieTrailer.setVisibility(movie.trailer == null ? View.GONE : View.VISIBLE);
         }
 
-        mPicasso.load(movie.getThumb()).error(R.drawable.placeholder).placeholder(R.drawable.placeholder).into(movieHolder.movieCover);
+        mPicasso.load(movie.getThumb()).error(R.drawable.placeholder)
+                .placeholder(R.drawable.placeholder).into(movieHolder.movieCover);
 
-        movieHolder.movieImdb.setOnClickListener(v -> openUri("http://www.imdb.com/title/" + movie.getImdb()));
+        movieHolder.movieImdb.setOnClickListener(v -> openUri("http://www.imdb.com/title/"
+                + movie.getImdb()));
 
         movieHolder.movieTrailer.setOnClickListener(v -> openUri(movie.trailer));
 
@@ -123,14 +129,13 @@ public class MovieAdapter extends HeaderFooterRecyclerViewAdapter {
             bundle.putParcelable(TAG_MOVIE, movie);
 
             if (AndroidVersionUtils.isHigherEqualToLollipop()) {
-                final Pair<View, String>[] pairs = AnimationUtils.createSafeTransitionParticipants(mHostFragment.getActivity(), false,
-                        new Pair<>(movieHolder.movieTitle, mHostFragment.getContext().getString(R.string.transition_title)),
-                        new Pair<>(movieHolder.movieOverview, mHostFragment.getContext().getString(R.string.transition_overview)),
-                        new Pair<>(movieHolder.movieCover, mHostFragment.getContext().getString(R.string.transition_cover)));
+                final Pair<View, String>[] pairs = AnimationUtils
+                        .createSafeTransitionParticipants(mFragment.getActivity(), false,
+                                new Pair<>(movieHolder.movieCover, mFragment.getContext().getString(R.string.transition_cover)));
 
-                DetailMovieActivity.launchActivity(mHostFragment.getContext(), bundle, pairs);
+                DetailMovieActivity.launchActivity(mFragment.getContext(), bundle, pairs);
             } else {
-                DetailMovieActivity.launchActivity(mHostFragment, bundle, movieHolder.movieCover);
+                DetailMovieActivity.launchActivity(mFragment, bundle, movieHolder.movieCover);
             }
         });
     }
@@ -138,7 +143,7 @@ public class MovieAdapter extends HeaderFooterRecyclerViewAdapter {
     private void openUri(String uri) {
         Intent i = new Intent(Intent.ACTION_VIEW);
         i.setData(Uri.parse(uri));
-        mHostFragment.getContext().startActivity(i);
+        mFragment.getContext().startActivity(i);
     }
 
     public static class MovieViewHolder extends RecyclerView.ViewHolder {
@@ -175,7 +180,8 @@ public class MovieAdapter extends HeaderFooterRecyclerViewAdapter {
         public FooterViewHolder(View itemView) {
             super(itemView);
             ProgressBar progressBar = (ProgressBar) itemView.findViewById(R.id.recyclerView_progressbar);
-            progressBar.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(itemView.getContext(), R.color.lightGreen300), MULTIPLY);
+            progressBar.getIndeterminateDrawable().setColorFilter(ContextCompat
+                    .getColor(itemView.getContext(), R.color.lightGreen300), MULTIPLY);
         }
     }
 

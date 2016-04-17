@@ -2,6 +2,7 @@ package com.azizbekian.example.manager;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.view.ViewStub;
 import android.widget.ProgressBar;
 
+import com.azizbekian.example.R;
 import com.azizbekian.example.adapter.SearchAdapter;
 import com.azizbekian.example.entity.SearchItem;
 import com.azizbekian.example.listener.BottomReachedScrollListener;
@@ -20,7 +22,6 @@ import com.azizbekian.example.utils.ConnectivityUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.azizbekian.example.R;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -48,7 +49,7 @@ public class SearchHelper {
 
     TraktTvApi.Search traktTvSearchApi;
 
-    private MainFragment mHostFragment;
+    private MainFragment mFragment;
     private View mSearchEmptyView;
     private View root;
     private ProgressBar mProgressBar;
@@ -65,10 +66,10 @@ public class SearchHelper {
     private static final int FETCHING = 1;
     private static int sMode = IDLE;
 
-    public SearchHelper(MainFragment hostFragment, TraktTvApi.Search traktTvSearchApi) {
-        this.mHostFragment = hostFragment;
+    public SearchHelper(@NonNull MainFragment hostFragment, TraktTvApi.Search traktTvSearchApi) {
+        this.mFragment = hostFragment;
         this.traktTvSearchApi = traktTvSearchApi;
-        View view = mHostFragment.getView();
+        View view = mFragment.getView();
         if (null != view) {
             root = ((ViewStub) view.findViewById(R.id.viewstub_search)).inflate();
             // at this point our layout is hidden and hasn't been given a chance to measure it's size
@@ -76,17 +77,17 @@ public class SearchHelper {
             root.measure(makeMeasureSpec(view.getWidth(), EXACTLY), makeMeasureSpec(view.getHeight(), EXACTLY));
 
             mProgressBar = (ProgressBar) root.findViewById(R.id.search_progress_indicator);
-            mProgressBar.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(mHostFragment.getContext(), R.color.lightGreen300), MULTIPLY);
+            mProgressBar.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(mFragment.getContext(), R.color.lightGreen300), MULTIPLY);
             mSearchEmptyView = root.findViewById(R.id.search_empty_view);
 
             RecyclerView mSearchRecyclerView = (RecyclerView) root.findViewById(R.id.searchRecyclerView);
-            LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(root.getContext());
-            mSearchRecyclerView.setLayoutManager(mLinearLayoutManager);
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(root.getContext());
+            mSearchRecyclerView.setLayoutManager(linearLayoutManager);
             mSearchRecyclerView.setHasFixedSize(true);
-            mSearchAdapter = new SearchAdapter(this, mHostFragment, EMPTY_LIST, getAppComponent().getPicasso());
+            mSearchAdapter = new SearchAdapter(this, mFragment, EMPTY_LIST, getAppComponent().getPicasso());
             mSearchRecyclerView.setAdapter(mSearchAdapter);
 
-            mBottomReachedListener = new BottomReachedScrollListener(mLinearLayoutManager, this::loadSearchResult);
+            mBottomReachedListener = new BottomReachedScrollListener(linearLayoutManager, this::loadSearchResult);
             mSearchRecyclerView.addOnScrollListener(mBottomReachedListener);
         }
     }
@@ -131,10 +132,10 @@ public class SearchHelper {
             final boolean isAdapterEmpty = mSearchAdapter.isEmpty();
             if (!isAdapterEmpty) sMode = FETCHING;
 
-            if (ConnectivityUtils.isNetworkAvailable(mHostFragment.getContext())) {
+            if (ConnectivityUtils.isNetworkAvailable(mFragment.getContext())) {
                 sMode = isAdapterEmpty ? IDLE : FETCHING;
                 if (isAdapterEmpty) toggleProgressBar(true);
-                String query = mHostFragment.getQuery();
+                String query = mFragment.getQuery();
                 cancelSearch();
                 sCurrentSearchCall = traktTvSearchApi.searchMovies(query, TYPE_MOVIE, mPageCounter);
                 sCurrentSearchCall.enqueue(new Callback<List<SearchItem>>() {
@@ -162,7 +163,7 @@ public class SearchHelper {
                     }
                 });
             } else {
-                mHostFragment.showSnackbar(true);
+                mFragment.showSnackbar(true);
             }
         }
     }

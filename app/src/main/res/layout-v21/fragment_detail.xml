@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/grey300"
-    tools:context=".activities.DetailMovieActivity">
+    tools:context=".ui.activity.DetailMovieActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"
@@ -52,7 +52,6 @@
                         style="@style/MovieTitle"
                         android:layout_marginBottom="@dimen/spacing_smaller"
                         android:layout_toEndOf="@id/movie_cover"
-                        android:transitionName="@string/transition_title"
                         tools:text="The Dark Knight" />
 
                     <TextView
@@ -62,7 +61,6 @@
                         android:layout_below="@id/movie_title"
                         android:layout_toEndOf="@id/movie_cover"
                         android:textColor="@color/grey700"
-                        android:transitionName="@string/transition_overview"
                         tools:text="overview text" />
                 </RelativeLayout>
 

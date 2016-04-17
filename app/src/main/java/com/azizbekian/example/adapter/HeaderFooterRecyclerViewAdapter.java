@@ -27,11 +27,14 @@ public abstract class HeaderFooterRecyclerViewAdapter extends RecyclerView.Adapt
     public final RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         // Delegate to proper methods based on the viewType ranges.
-        if (viewType >= HEADER_VIEW_TYPE_OFFSET && viewType < HEADER_VIEW_TYPE_OFFSET + VIEW_TYPE_MAX_COUNT) {
+        if (viewType >= HEADER_VIEW_TYPE_OFFSET && viewType < HEADER_VIEW_TYPE_OFFSET
+                + VIEW_TYPE_MAX_COUNT) {
             return onCreateHeaderItemViewHolder(parent, viewType - HEADER_VIEW_TYPE_OFFSET);
-        } else if (viewType >= FOOTER_VIEW_TYPE_OFFSET && viewType < FOOTER_VIEW_TYPE_OFFSET + VIEW_TYPE_MAX_COUNT) {
+        } else if (viewType >= FOOTER_VIEW_TYPE_OFFSET && viewType < FOOTER_VIEW_TYPE_OFFSET
+                + VIEW_TYPE_MAX_COUNT) {
             return onCreateFooterItemViewHolder(parent, viewType - FOOTER_VIEW_TYPE_OFFSET);
-        } else if (viewType >= CONTENT_VIEW_TYPE_OFFSET && viewType < CONTENT_VIEW_TYPE_OFFSET + VIEW_TYPE_MAX_COUNT) {
+        } else if (viewType >= CONTENT_VIEW_TYPE_OFFSET && viewType < CONTENT_VIEW_TYPE_OFFSET
+                + VIEW_TYPE_MAX_COUNT) {
             return onCreateContentItemViewHolder(parent, viewType - CONTENT_VIEW_TYPE_OFFSET);
         } else {
             // This shouldn't happen as we check that the viewType provided by the client is valid.
@@ -75,9 +78,11 @@ public abstract class HeaderFooterRecyclerViewAdapter extends RecyclerView.Adapt
         if (headerItemCount > 0 && position < headerItemCount) {
             return validateViewType(getHeaderItemViewType(position)) + HEADER_VIEW_TYPE_OFFSET;
         } else if (contentItemCount > 0 && position - headerItemCount < contentItemCount) {
-            return validateViewType(getContentItemViewType(position - headerItemCount)) + CONTENT_VIEW_TYPE_OFFSET;
+            return validateViewType(getContentItemViewType(position - headerItemCount))
+                    + CONTENT_VIEW_TYPE_OFFSET;
         } else {
-            return validateViewType(getFooterItemViewType(position - headerItemCount - contentItemCount)) + FOOTER_VIEW_TYPE_OFFSET;
+            return validateViewType(getFooterItemViewType(position - headerItemCount - contentItemCount))
+                    + FOOTER_VIEW_TYPE_OFFSET;
         }
     }
 
@@ -102,7 +107,8 @@ public abstract class HeaderFooterRecyclerViewAdapter extends RecyclerView.Adapt
     public final void notifyHeaderItemInserted(int position) {
         int newHeaderItemCount = getHeaderItemCount();
         if (position < 0 || position >= newHeaderItemCount) {
-            throw new IndexOutOfBoundsException("The given position " + position + " is not within the position bounds for header items [0 - " + (newHeaderItemCount - 1) + "].");
+            throw new IndexOutOfBoundsException("The given position " + position + " is not within " +
+                    "the position bounds for header items [0 - " + (newHeaderItemCount - 1) + "].");
         }
         notifyItemInserted(position);
     }
@@ -116,7 +122,9 @@ public abstract class HeaderFooterRecyclerViewAdapter extends RecyclerView.Adapt
     public final void notifyHeaderItemRangeInserted(int positionStart, int itemCount) {
         int newHeaderItemCount = getHeaderItemCount();
         if (positionStart < 0 || itemCount < 0 || positionStart + itemCount > newHeaderItemCount) {
-            throw new IndexOutOfBoundsException("The given range [" + positionStart + " - " + (positionStart + itemCount - 1) + "] is not within the position bounds for header items [0 - " + (newHeaderItemCount - 1) + "].");
+            throw new IndexOutOfBoundsException("The given range [" + positionStart + " - " +
+                    (positionStart + itemCount - 1) + "] is not within the position bounds for " +
+                    "header items [0 - " + (newHeaderItemCount - 1) + "].");
         }
         notifyItemRangeInserted(positionStart, itemCount);
     }
@@ -128,7 +136,8 @@ public abstract class HeaderFooterRecyclerViewAdapter extends RecyclerView.Adapt
      */
     public final void notifyHeaderItemChanged(int position) {
         if (position < 0 || position >= headerItemCount) {
-            throw new IndexOutOfBoundsException("The given position " + position + " is not within the position bounds for header items [0 - " + (headerItemCount - 1) + "].");
+            throw new IndexOutOfBoundsException("The given position " + position + " is not within " +
+                    "the position bounds for header items [0 - " + (headerItemCount - 1) + "].");
         }
         notifyItemChanged(position);
     }
@@ -141,7 +150,9 @@ public abstract class HeaderFooterRecyclerViewAdapter extends RecyclerView.Adapt
      */
     public final void notifyHeaderItemRangeChanged(int positionStart, int itemCount) {
         if (positionStart < 0 || itemCount < 0 || positionStart + itemCount >= headerItemCount) {
-            throw new IndexOutOfBoundsException("The given range [" + positionStart + " - " + (positionStart + itemCount - 1) + "] is not within the position bounds for header items [0 - " + (headerItemCount - 1) + "].");
+            throw new IndexOutOfBoundsException("The given range [" + positionStart + " - " +
+                    (positionStart + itemCount - 1) + "] is not within the position bounds for header" +
+                    " items [0 - " + (headerItemCount - 1) + "].");
         }
         notifyItemRangeChanged(positionStart, itemCount);
     }
@@ -154,8 +165,11 @@ public abstract class HeaderFooterRecyclerViewAdapter extends RecyclerView.Adapt
      * @param toPosition   the new position.
      */
     public void notifyHeaderItemMoved(int fromPosition, int toPosition) {
-        if (fromPosition < 0 || toPosition < 0 || fromPosition >= headerItemCount || toPosition >= headerItemCount) {
-            throw new IndexOutOfBoundsException("The given fromPosition " + fromPosition + " or toPosition " + toPosition + " is not within the position bounds for header items [0 - " + (headerItemCount - 1) + "].");
+        if (fromPosition < 0 || toPosition < 0 || fromPosition >= headerItemCount
+                || toPosition >= headerItemCount) {
+            throw new IndexOutOfBoundsException("The given fromPosition " + fromPosition +
+                    " or toPosition " + toPosition + " is not within the position bounds for header " +
+                    "items [0 - " + (headerItemCount - 1) + "].");
         }
         notifyItemMoved(fromPosition, toPosition);
     }
@@ -167,7 +181,9 @@ public abstract class HeaderFooterRecyclerViewAdapter extends RecyclerView.Adapt
      */
     public void notifyHeaderItemRemoved(int position) {
         if (position < 0 || position >= headerItemCount) {
-            throw new IndexOutOfBoundsException("The given position " + position + " is not within the position bounds for header items [0 - " + (headerItemCount - 1) + "].");
+            throw new IndexOutOfBoundsException("The given position " + position +
+                    " is not within the position bounds for header items [0 - "
+                    + (headerItemCount - 1) + "].");
         }
         notifyItemRemoved(position);
     }
@@ -180,7 +196,9 @@ public abstract class HeaderFooterRecyclerViewAdapter extends RecyclerView.Adapt
      */
     public void notifyHeaderItemRangeRemoved(int positionStart, int itemCount) {
         if (positionStart < 0 || itemCount < 0 || positionStart + itemCount > headerItemCount) {
-            throw new IndexOutOfBoundsException("The given range [" + positionStart + " - " + (positionStart + itemCount - 1) + "] is not within the position bounds for header items [0 - " + (headerItemCount - 1) + "].");
+            throw new IndexOutOfBoundsException("The given range [" + positionStart + " - "
+                    + (positionStart + itemCount - 1) + "] is not within the position bounds for " +
+                    "header items [0 - " + (headerItemCount - 1) + "].");
         }
         notifyItemRangeRemoved(positionStart, itemCount);
     }
@@ -194,7 +212,8 @@ public abstract class HeaderFooterRecyclerViewAdapter extends RecyclerView.Adapt
         int newHeaderItemCount = getHeaderItemCount();
         int newContentItemCount = getContentItemCount();
         if (position < 0 || position >= newContentItemCount) {
-            throw new IndexOutOfBoundsException("The given position " + position + " is not within the position bounds for content items [0 - " + (newContentItemCount - 1) + "].");
+            throw new IndexOutOfBoundsException("The given position " + position + " is not within " +
+                    "the position bounds for content items [0 - " + (newContentItemCount - 1) + "].");
         }
         notifyItemInserted(position + newHeaderItemCount);
     }
@@ -209,7 +228,9 @@ public abstract class HeaderFooterRecyclerViewAdapter extends RecyclerView.Adapt
         int newHeaderItemCount = getHeaderItemCount();
         int newContentItemCount = getContentItemCount();
         if (positionStart < 0 || itemCount < 0 || positionStart + itemCount > newContentItemCount) {
-            throw new IndexOutOfBoundsException("The given range [" + positionStart + " - " + (positionStart + itemCount - 1) + "] is not within the position bounds for content items [0 - " + (newContentItemCount - 1) + "].");
+            throw new IndexOutOfBoundsException("The given range [" + positionStart + " - " +
+                    (positionStart + itemCount - 1) + "] is not within the position bounds for " +
+                    "content items [0 - " + (newContentItemCount - 1) + "].");
         }
         notifyItemRangeInserted(positionStart + newHeaderItemCount, itemCount);
     }
@@ -221,7 +242,8 @@ public abstract class HeaderFooterRecyclerViewAdapter extends RecyclerView.Adapt
      */
     public final void notifyContentItemChanged(int position) {
         if (position < 0 || position >= contentItemCount) {
-            throw new IndexOutOfBoundsException("The given position " + position + " is not within the position bounds for content items [0 - " + (contentItemCount - 1) + "].");
+            throw new IndexOutOfBoundsException("The given position " + position + " is not within " +
+                    "the position bounds for content items [0 - " + (contentItemCount - 1) + "].");
         }
         notifyItemChanged(position + headerItemCount);
     }
@@ -234,7 +256,9 @@ public abstract class HeaderFooterRecyclerViewAdapter extends RecyclerView.Adapt
      */
     public final void notifyContentItemRangeChanged(int positionStart, int itemCount) {
         if (positionStart < 0 || itemCount < 0 || positionStart + itemCount > contentItemCount) {
-            throw new IndexOutOfBoundsException("The given range [" + positionStart + " - " + (positionStart + itemCount - 1) + "] is not within the position bounds for content items [0 - " + (contentItemCount - 1) + "].");
+            throw new IndexOutOfBoundsException("The given range [" + positionStart + " - " +
+                    (positionStart + itemCount - 1) + "] is not within the position bounds for" +
+                    " content items [0 - " + (contentItemCount - 1) + "].");
         }
         notifyItemRangeChanged(positionStart + headerItemCount, itemCount);
     }
@@ -246,8 +270,11 @@ public abstract class HeaderFooterRecyclerViewAdapter extends RecyclerView.Adapt
      * @param toPosition   the new position.
      */
     public final void notifyContentItemMoved(int fromPosition, int toPosition) {
-        if (fromPosition < 0 || toPosition < 0 || fromPosition >= contentItemCount || toPosition >= contentItemCount) {
-            throw new IndexOutOfBoundsException("The given fromPosition " + fromPosition + " or toPosition " + toPosition + " is not within the position bounds for content items [0 - " + (contentItemCount - 1) + "].");
+        if (fromPosition < 0 || toPosition < 0 || fromPosition >= contentItemCount
+                || toPosition >= contentItemCount) {
+            throw new IndexOutOfBoundsException("The given fromPosition " + fromPosition +
+                    " or toPosition " + toPosition + " is not within the position bounds for content" +
+                    " items [0 - " + (contentItemCount - 1) + "].");
         }
         notifyItemMoved(fromPosition + headerItemCount, toPosition + headerItemCount);
     }
@@ -259,7 +286,9 @@ public abstract class HeaderFooterRecyclerViewAdapter extends RecyclerView.Adapt
      */
     public final void notifyContentItemRemoved(int position) {
         if (position < 0 || position >= contentItemCount) {
-            throw new IndexOutOfBoundsException("The given position " + position + " is not within the position bounds for content items [0 - " + (contentItemCount - 1) + "].");
+            throw new IndexOutOfBoundsException("The given position " + position +
+                    " is not within the position bounds for content items [0 - "
+                    + (contentItemCount - 1) + "].");
         }
         notifyItemRemoved(position + headerItemCount);
     }
@@ -272,7 +301,9 @@ public abstract class HeaderFooterRecyclerViewAdapter extends RecyclerView.Adapt
      */
     public final void notifyContentItemRangeRemoved(int positionStart, int itemCount) {
         if (positionStart < 0 || itemCount < 0 || positionStart + itemCount > contentItemCount) {
-            throw new IndexOutOfBoundsException("The given range [" + positionStart + " - " + (positionStart + itemCount - 1) + "] is not within the position bounds for content items [0 - " + (contentItemCount - 1) + "].");
+            throw new IndexOutOfBoundsException("The given range [" + positionStart + " - " +
+                    (positionStart + itemCount - 1) + "] is not within the position bounds for" +
+                    " content items [0 - " + (contentItemCount - 1) + "].");
         }
         notifyItemRangeRemoved(positionStart + headerItemCount, itemCount);
     }
@@ -287,7 +318,8 @@ public abstract class HeaderFooterRecyclerViewAdapter extends RecyclerView.Adapt
         int newContentItemCount = getContentItemCount();
         int newFooterItemCount = getFooterItemCount();
         if (position < 0 || position >= newFooterItemCount) {
-            throw new IndexOutOfBoundsException("The given position " + position + " is not within the position bounds for footer items [0 - " + (newFooterItemCount - 1) + "].");
+            throw new IndexOutOfBoundsException("The given position " + position + " is not within" +
+                    " the position bounds for footer items [0 - " + (newFooterItemCount - 1) + "].");
         }
         notifyItemInserted(position + newHeaderItemCount + newContentItemCount);
     }
@@ -303,7 +335,9 @@ public abstract class HeaderFooterRecyclerViewAdapter extends RecyclerView.Adapt
         int newContentItemCount = getContentItemCount();
         int newFooterItemCount = getFooterItemCount();
         if (positionStart < 0 || itemCount < 0 || positionStart + itemCount > newFooterItemCount) {
-            throw new IndexOutOfBoundsException("The given range [" + positionStart + " - " + (positionStart + itemCount - 1) + "] is not within the position bounds for footer items [0 - " + (newFooterItemCount - 1) + "].");
+            throw new IndexOutOfBoundsException("The given range [" + positionStart + " - " +
+                    (positionStart + itemCount - 1) + "] is not within the position bounds for" +
+                    " footer items [0 - " + (newFooterItemCount - 1) + "].");
         }
         notifyItemRangeInserted(positionStart + newHeaderItemCount + newContentItemCount, itemCount);
     }
@@ -315,7 +349,8 @@ public abstract class HeaderFooterRecyclerViewAdapter extends RecyclerView.Adapt
      */
     public final void notifyFooterItemChanged(int position) {
         if (position < 0 || position >= footerItemCount) {
-            throw new IndexOutOfBoundsException("The given position " + position + " is not within the position bounds for footer items [0 - " + (footerItemCount - 1) + "].");
+            throw new IndexOutOfBoundsException("The given position " + position + " is not within" +
+                    " the position bounds for footer items [0 - " + (footerItemCount - 1) + "].");
         }
         notifyItemChanged(position + headerItemCount + contentItemCount);
     }
@@ -328,7 +363,9 @@ public abstract class HeaderFooterRecyclerViewAdapter extends RecyclerView.Adapt
      */
     public final void notifyFooterItemRangeChanged(int positionStart, int itemCount) {
         if (positionStart < 0 || itemCount < 0 || positionStart + itemCount > footerItemCount) {
-            throw new IndexOutOfBoundsException("The given range [" + positionStart + " - " + (positionStart + itemCount - 1) + "] is not within the position bounds for footer items [0 - " + (footerItemCount - 1) + "].");
+            throw new IndexOutOfBoundsException("The given range [" + positionStart + " - " +
+                    (positionStart + itemCount - 1) + "] is not within the position bounds for " +
+                    "footer items [0 - " + (footerItemCount - 1) + "].");
         }
         notifyItemRangeChanged(positionStart + headerItemCount + contentItemCount, itemCount);
     }
@@ -340,10 +377,14 @@ public abstract class HeaderFooterRecyclerViewAdapter extends RecyclerView.Adapt
      * @param toPosition   the new position.
      */
     public final void notifyFooterItemMoved(int fromPosition, int toPosition) {
-        if (fromPosition < 0 || toPosition < 0 || fromPosition >= footerItemCount || toPosition >= footerItemCount) {
-            throw new IndexOutOfBoundsException("The given fromPosition " + fromPosition + " or toPosition " + toPosition + " is not within the position bounds for footer items [0 - " + (footerItemCount - 1) + "].");
+        if (fromPosition < 0 || toPosition < 0 || fromPosition >= footerItemCount
+                || toPosition >= footerItemCount) {
+            throw new IndexOutOfBoundsException("The given fromPosition " + fromPosition +
+                    " or toPosition " + toPosition + " is not within the position bounds for footer " +
+                    "items [0 - " + (footerItemCount - 1) + "].");
         }
-        notifyItemMoved(fromPosition + headerItemCount + contentItemCount, toPosition + headerItemCount + contentItemCount);
+        notifyItemMoved(fromPosition + headerItemCount + contentItemCount, toPosition
+                + headerItemCount + contentItemCount);
     }
 
     /**
@@ -353,7 +394,8 @@ public abstract class HeaderFooterRecyclerViewAdapter extends RecyclerView.Adapt
      */
     public final void notifyFooterItemRemoved(int position) {
         if (position < 0 || position >= footerItemCount) {
-            throw new IndexOutOfBoundsException("The given position " + position + " is not within the position bounds for footer items [0 - " + (footerItemCount - 1) + "].");
+            throw new IndexOutOfBoundsException("The given position " + position + " is not within" +
+                    " the position bounds for footer items [0 - " + (footerItemCount - 1) + "].");
         }
         notifyItemRemoved(position + headerItemCount + contentItemCount);
     }
@@ -366,7 +408,9 @@ public abstract class HeaderFooterRecyclerViewAdapter extends RecyclerView.Adapt
      */
     public final void notifyFooterItemRangeRemoved(int positionStart, int itemCount) {
         if (positionStart < 0 || itemCount < 0 || positionStart + itemCount > footerItemCount) {
-            throw new IndexOutOfBoundsException("The given range [" + positionStart + " - " + (positionStart + itemCount - 1) + "] is not within the position bounds for footer items [0 - " + (footerItemCount - 1) + "].");
+            throw new IndexOutOfBoundsException("The given range [" + positionStart + " - " +
+                    (positionStart + itemCount - 1) + "] is not within the position bounds for" +
+                    " footer items [0 - " + (footerItemCount - 1) + "].");
         }
         notifyItemRangeRemoved(positionStart + headerItemCount + contentItemCount, itemCount);
     }
@@ -402,76 +446,91 @@ public abstract class HeaderFooterRecyclerViewAdapter extends RecyclerView.Adapt
     }
 
     /**
-     * Gets the header item count. This method can be called several times, so it should not calculate the count every time.
+     * Gets the header item count. This method can be called several times, so it should not
+     * calculate the count every time.
      *
      * @return the header item count.
      */
     protected abstract int getHeaderItemCount();
 
     /**
-     * Gets the footer item count. This method can be called several times, so it should not calculate the count every time.
+     * Gets the footer item count. This method can be called several times, so it should not
+     * calculate the count every time.
      *
      * @return the footer item count.
      */
     protected abstract int getFooterItemCount();
 
     /**
-     * Gets the content item count. This method can be called several times, so it should not calculate the count every time.
+     * Gets the content item count. This method can be called several times, so it should not
+     * calculate the count every time.
      *
      * @return the content item count.
      */
     protected abstract int getContentItemCount();
 
     /**
-     * This method works exactly the same as {@link #onCreateViewHolder(ViewGroup, int)}, but for header items.
+     * This method works exactly the same as {@link #onCreateViewHolder(ViewGroup, int)}, but for
+     * header items.
      *
      * @param parent         the parent view.
      * @param headerViewType the view type for the header.
      * @return the view holder.
      */
-    protected abstract RecyclerView.ViewHolder onCreateHeaderItemViewHolder(ViewGroup parent, int headerViewType);
+    protected abstract RecyclerView.ViewHolder onCreateHeaderItemViewHolder(ViewGroup parent,
+                                                                            int headerViewType);
 
     /**
-     * This method works exactly the same as {@link #onCreateViewHolder(ViewGroup, int)}, but for footer items.
+     * This method works exactly the same as {@link #onCreateViewHolder(ViewGroup, int)}, but for
+     * footer items.
      *
      * @param parent         the parent view.
      * @param footerViewType the view type for the footer.
      * @return the view holder.
      */
-    protected abstract RecyclerView.ViewHolder onCreateFooterItemViewHolder(ViewGroup parent, int footerViewType);
+    protected abstract RecyclerView.ViewHolder onCreateFooterItemViewHolder(ViewGroup parent,
+                                                                            int footerViewType);
 
     /**
-     * This method works exactly the same as {@link #onCreateViewHolder(ViewGroup, int)}, but for content items.
+     * This method works exactly the same as {@link #onCreateViewHolder(ViewGroup, int)}, but for
+     * content items.
      *
      * @param parent          the parent view.
      * @param contentViewType the view type for the content.
      * @return the view holder.
      */
-    protected abstract RecyclerView.ViewHolder onCreateContentItemViewHolder(ViewGroup parent, int contentViewType);
+    protected abstract RecyclerView.ViewHolder onCreateContentItemViewHolder(ViewGroup parent,
+                                                                             int contentViewType);
 
     /**
-     * This method works exactly the same as {@link #onBindViewHolder(RecyclerView.ViewHolder, int)}, but for header items.
+     * This method works exactly the same as {@link #onBindViewHolder(RecyclerView.ViewHolder, int)},
+     * but for header items.
      *
      * @param headerViewHolder the view holder for the header item.
      * @param position         the position.
      */
-    protected abstract void onBindHeaderItemViewHolder(RecyclerView.ViewHolder headerViewHolder, int position);
+    protected abstract void onBindHeaderItemViewHolder(RecyclerView.ViewHolder headerViewHolder,
+                                                       int position);
 
     /**
-     * This method works exactly the same as {@link #onBindViewHolder(RecyclerView.ViewHolder, int)}, but for footer items.
+     * This method works exactly the same as {@link #onBindViewHolder(RecyclerView.ViewHolder, int)},
+     * but for footer items.
      *
      * @param footerViewHolder the view holder for the footer item.
      * @param position         the position.
      */
-    protected abstract void onBindFooterItemViewHolder(RecyclerView.ViewHolder footerViewHolder, int position);
+    protected abstract void onBindFooterItemViewHolder(RecyclerView.ViewHolder footerViewHolder,
+                                                       int position);
 
     /**
-     * This method works exactly the same as {@link #onBindViewHolder(RecyclerView.ViewHolder, int)}, but for content items.
+     * This method works exactly the same as {@link #onBindViewHolder(RecyclerView.ViewHolder, int)},
+     * but for content items.
      *
      * @param contentViewHolder the view holder for the content item.
      * @param position          the position.
      */
-    protected abstract void onBindContentItemViewHolder(RecyclerView.ViewHolder contentViewHolder, int position);
+    protected abstract void onBindContentItemViewHolder(RecyclerView.ViewHolder contentViewHolder,
+                                                        int position);
 
 }
 

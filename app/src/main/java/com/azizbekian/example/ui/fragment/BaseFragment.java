@@ -36,6 +36,7 @@ public class BaseFragment extends Fragment {
     /**
      * Unsubscribes from all subscriptions from {@code mSubscriptionsList}.
      */
+    @SuppressWarnings("all")
     protected void unsubscribeAll() {
         for (Subscription subscription : mSubscriptionsList) subscription.unsubscribe();
     }
