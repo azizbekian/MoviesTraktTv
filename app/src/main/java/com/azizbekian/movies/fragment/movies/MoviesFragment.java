@@ -54,7 +54,7 @@ import static com.azizbekian.movies.misc.Constants.ANIM_DURATION_FADE;
  *
  * @author Andranik Azizbekian (azizbekyanandranik@gmail.com)
  */
-public class MoviesFragment extends BaseFragment {
+public class MoviesFragment extends BaseFragment implements MoviesContract.View {
 
     public static final String TAG = MoviesFragment.class.getSimpleName();
 
@@ -82,6 +82,8 @@ public class MoviesFragment extends BaseFragment {
     private static final int IDLE = 0;
     private static final int FETCHING = 1;
     private static int sMode = IDLE;
+
+    private MoviesContract.Presenter mPresenter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -149,6 +151,7 @@ public class MoviesFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         ButterKnife.bind(this, view);
+        mPresenter = new MoviesPresenter(this);
         return view;
     }
 
@@ -156,15 +159,7 @@ public class MoviesFragment extends BaseFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        ViewUtils.setupToolbar((AppCompatActivity) getActivity(),
-                (Toolbar) view.findViewById(R.id.toolbar),
-                getString(R.string.title_popular_movies), false);
-
-        mProgressBar.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(getContext(),
-                R.color.lightGreen300), MULTIPLY);
-
-        setupRecyclerView();
-        loadMovies();
+        mPresenter.start();
     }
 
     @Override
@@ -174,7 +169,23 @@ public class MoviesFragment extends BaseFragment {
         mSearchHelper = null;
     }
 
-    private void setupRecyclerView() {
+    @Override
+    public void setupToolbar() {
+        if (null != getView())
+            ViewUtils.setupToolbar((AppCompatActivity) getActivity(),
+                    (Toolbar) getView().findViewById(R.id.toolbar),
+                    getString(R.string.title_popular_movies), false);
+
+    }
+
+    @Override
+    public void setupProgressBar() {
+        mProgressBar.getIndeterminateDrawable()
+                .setColorFilter(ContextCompat.getColor(getContext(), R.color.lightGreen300), MULTIPLY);
+    }
+
+    @Override
+    public void setupRecycler() {
         mMoviesRecycler.setHasFixedSize(true);
         mMovieAdapter = new MovieAdapter(this, mMovies);
         mMoviesRecycler.setAdapter(mMovieAdapter);
@@ -184,10 +195,8 @@ public class MoviesFragment extends BaseFragment {
         mMoviesRecycler.addOnScrollListener(mBottomReachedListener);
     }
 
-    /**
-     * Performs request to fetch data from server.
-     */
-    private void loadMovies() {
+    @Override
+    public void loadMovies() {
         // if the content is being loaded - ignore this request
         if (sMode == IDLE) {
             final boolean isAdapterEmpty = mMovieAdapter.isEmpty();
