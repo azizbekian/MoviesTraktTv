@@ -1,7 +1,5 @@
 package com.azizbekian.movies.adapter;
 
-import android.os.Bundle;
-import android.support.v4.util.Pair;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,18 +7,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.azizbekian.movies.R;
 import com.azizbekian.movies.entity.SearchItem;
-import com.azizbekian.movies.fragment.movies.MoviesFragment;
-import com.azizbekian.movies.manager.SearchHelper;
-import com.azizbekian.movies.activity.DetailMovieActivity;
-import com.azizbekian.movies.fragment.DetailMovieFragment;
-import com.azizbekian.movies.utils.AndroidVersionUtils;
-import com.azizbekian.movies.utils.AnimationUtils;
+import com.azizbekian.movies.fragment.movies.MoviesContract;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
-
-import com.azizbekian.movies.R;
 
 import static com.azizbekian.movies.MoviesApplication.getAppComponent;
 
@@ -31,14 +23,12 @@ import static com.azizbekian.movies.MoviesApplication.getAppComponent;
  */
 public class SearchAdapter extends HeaderFooterRecyclerViewAdapter {
 
-    private SearchHelper mSearchHelper;
-    private MoviesFragment mFragment;
+    private MoviesContract.Presenter mPresenter;
     private List<SearchItem> mData;
     private Picasso mPicasso;
 
-    public SearchAdapter(SearchHelper searchHelper, MoviesFragment hostFragment, List<SearchItem> data) {
-        mSearchHelper = searchHelper;
-        mFragment = hostFragment;
+    public SearchAdapter(MoviesContract.Presenter presenter, List<SearchItem> data) {
+        mPresenter = presenter;
         mData = data;
         mPicasso = getAppComponent().getPicasso();
     }
@@ -92,7 +82,7 @@ public class SearchAdapter extends HeaderFooterRecyclerViewAdapter {
 
     @Override
     protected void onBindFooterItemViewHolder(RecyclerView.ViewHolder footerViewHolder, int position) {
-        footerViewHolder.itemView.setVisibility(mSearchHelper.isContentLoading() ? View.VISIBLE : View.GONE);
+        footerViewHolder.itemView.setVisibility(!mPresenter.isSearchModeIdle() ? View.VISIBLE : View.GONE);
     }
 
     @Override
@@ -110,7 +100,8 @@ public class SearchAdapter extends HeaderFooterRecyclerViewAdapter {
                 .placeholder(R.drawable.placeholder)
                 .into(searchItemHolder.movieCover);
 
-        searchItemHolder.searchContainer.setOnClickListener(v -> launchDetailMovieActivity(searchItemHolder, searchItem));
+        searchItemHolder.searchContainer.setOnClickListener(v ->
+                mPresenter.launchDetailMovieActivity(searchItemHolder.movieCover, searchItem.movie));
     }
 
     @Override
@@ -120,22 +111,6 @@ public class SearchAdapter extends HeaderFooterRecyclerViewAdapter {
         if (holder instanceof SearchItemHolder) {
             SearchItemHolder searchItemHolder = (SearchItemHolder) holder;
             searchItemHolder.searchContainer.setOnClickListener(null);
-        }
-    }
-
-    /**
-     * Launches {@link DetailMovieActivity}, providing some more information to perform animation transition.
-     */
-    private void launchDetailMovieActivity(SearchItemHolder searchItemHolder, SearchItem searchItem) {
-        Bundle bundle = new Bundle();
-        bundle.putParcelable(DetailMovieFragment.TAG_MOVIE, searchItem.movie);
-        if (AndroidVersionUtils.isHigherEqualToLollipop()) {
-            final Pair<View, String>[] pairs = AnimationUtils.createSafeTransitionParticipants(mFragment.getActivity(), false,
-                    new Pair<>(searchItemHolder.movieCover, mFragment.getContext().getString(R.string.transition_cover)));
-
-            DetailMovieActivity.launchActivity(mFragment.getContext(), bundle, pairs);
-        } else {
-            DetailMovieActivity.launchActivity(mFragment, bundle, searchItemHolder.movieCover);
         }
     }
 

@@ -59,7 +59,7 @@ public interface TraktTvApi {
                 "trakt-api-version: 2"})
         @GET("/search?")
         Call<List<SearchItem>> searchMovies(@Query("query") String query,
-                                            @Query("type") String type,
+                                            @Query("type") @SearchType String type,
                                             @Query("page") int page);
     }
 
@@ -68,6 +68,13 @@ public interface TraktTvApi {
             Constants.EXTEND_TYPE_FULL_IMAGES
     })
     @interface ExtendType {
+    }
+
+    @Retention(RetentionPolicy.SOURCE)
+    @StringDef({
+            Constants.TYPE_MOVIE
+    })
+    @interface SearchType {
     }
 
 }

@@ -1,11 +1,13 @@
 package com.azizbekian.movies.fragment.movies;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.util.Pair;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,35 +20,30 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewStub;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.azizbekian.movies.R;
-import com.azizbekian.movies.adapter.MovieAdapter;
+import com.azizbekian.movies.activity.DetailMovieActivity;
 import com.azizbekian.movies.entity.ConnectivityChangeEvent;
 import com.azizbekian.movies.entity.SearchItem;
 import com.azizbekian.movies.fragment.BaseFragment;
 import com.azizbekian.movies.listener.BottomReachedScrollListener;
-import com.azizbekian.movies.manager.RxManager;
-import com.azizbekian.movies.manager.SearchHelper;
-import com.azizbekian.movies.rest.TraktTvApi;
-import com.azizbekian.movies.utils.NetworkUtils;
-import com.azizbekian.movies.utils.RxUtils;
+import com.azizbekian.movies.utils.AndroidVersionUtils;
+import com.azizbekian.movies.utils.AnimationUtils;
 import com.azizbekian.movies.utils.ViewUtils;
-import com.jakewharton.rxbinding.support.v7.widget.RxSearchView;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.greenrobot.event.EventBus;
-import rx.Subscriber;
+import rx.Subscription;
 
 import static android.graphics.PorterDuff.Mode.MULTIPLY;
-import static com.azizbekian.movies.MoviesApplication.getAppComponent;
+import static android.view.View.MeasureSpec.EXACTLY;
+import static android.view.View.MeasureSpec.makeMeasureSpec;
+import static com.azizbekian.movies.fragment.DetailMovieFragment.TAG_MOVIE;
 import static com.azizbekian.movies.misc.Constants.ANIM_DURATION_FADE;
 
 /**
@@ -58,38 +55,25 @@ public class MoviesFragment extends BaseFragment implements MoviesContract.View 
 
     public static final String TAG = MoviesFragment.class.getSimpleName();
 
-    public static final String KEY_SEARCH = "key_search";
-    public static final String KEY_MOVIES = "key_movies";
-
     @Bind(R.id.coordinatorLayout) CoordinatorLayout mCoordinatorLayout;
     @Bind(R.id.recyclerView) RecyclerView mMoviesRecycler;
     @Bind(R.id.empty_view) View mEmptyView;
-    @Bind(R.id.progress_indicator) ProgressBar mProgressBar;
-    Snackbar mSnackbar;
-    SearchView mSearchView;
+    @Bind(R.id.progress_indicator) ProgressBar mMainProgressBar;
+    @Bind(R.id.viewstub_search) View mSearchRootView;
+    private ProgressBar mSearchProgressBar;
+    private View mSearchEmptyView;
 
-    @Inject
-    TraktTvApi.Default mTraktTvDefaultApi;
-
-    private MovieAdapter mMovieAdapter;
-    private List<SearchItem.Movie> mMovies = new ArrayList<>();
-    private SearchHelper mSearchHelper;
+    private Snackbar mSnackbar;
+    private SearchView mSearchView;
 
     private BottomReachedScrollListener mBottomReachedListener;
-
-    private int mPageCounter = 1;
-
-    private static final int IDLE = 0;
-    private static final int FETCHING = 1;
-    private static int sMode = IDLE;
+    private BottomReachedScrollListener mSearchBottomReachedListener;
 
     private MoviesContract.Presenter mPresenter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        getAppComponent().inject(this);
 
         setRetainInstance(true);
         setHasOptionsMenu(true);
@@ -104,28 +88,28 @@ public class MoviesFragment extends BaseFragment implements MoviesContract.View 
     @Override
     public void onStop() {
         EventBus.getDefault().unregister(this);
-        if (null != mSearchHelper) mSearchHelper.cancelSearch();
         super.onStop();
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.main_menu, menu);
 
+        inflater.inflate(R.menu.main_menu, menu);
         MenuItem mSearchItem = menu.findItem(R.id.action_search);
         mSearchView = (SearchView) mSearchItem.getActionView();
+
         MenuItemCompat.setOnActionExpandListener(mSearchItem,
                 new MenuItemCompat.OnActionExpandListener() {
                     @Override
                     public boolean onMenuItemActionCollapse(MenuItem item) {
-                        mSearchHelper.animateSearchView(false);
+                        mPresenter.revealSearchLayout(false);
                         return true;
                     }
 
                     @Override
                     public boolean onMenuItemActionExpand(MenuItem item) {
-                        mSearchHelper.animateSearchView(true);
+                        mPresenter.revealSearchLayout(true);
                         return true;
                     }
                 });
@@ -134,14 +118,7 @@ public class MoviesFragment extends BaseFragment implements MoviesContract.View 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_search) {
-            if (null == mSearchHelper) {
-                mSearchHelper = new SearchHelper(this, getAppComponent().getSearchApi());
-            }
-
-            addSubscription(KEY_SEARCH, mSearchHelper.onSearchTextChange(RxSearchView
-                    .queryTextChanges(mSearchView)
-                    .compose(RxUtils.applyNotEmptyTextChangeTransformer())));
-            return true;
+            mPresenter.onSearchMagnifierClicked(mSearchView);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -158,7 +135,6 @@ public class MoviesFragment extends BaseFragment implements MoviesContract.View 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         mPresenter.start();
     }
 
@@ -166,7 +142,7 @@ public class MoviesFragment extends BaseFragment implements MoviesContract.View 
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
-        mSearchHelper = null;
+        mPresenter.finish();
     }
 
     @Override
@@ -179,89 +155,57 @@ public class MoviesFragment extends BaseFragment implements MoviesContract.View 
     }
 
     @Override
-    public void setupProgressBar() {
-        mProgressBar.getIndeterminateDrawable()
+    public void setupMainProgressBar() {
+        mMainProgressBar.getIndeterminateDrawable()
                 .setColorFilter(ContextCompat.getColor(getContext(), R.color.lightGreen300), MULTIPLY);
     }
 
     @Override
-    public void setupRecycler() {
+    public void setupMainRecycler() {
         mMoviesRecycler.setHasFixedSize(true);
-        mMovieAdapter = new MovieAdapter(this, mMovies);
-        mMoviesRecycler.setAdapter(mMovieAdapter);
-        toggleEmptyView();
+        mMoviesRecycler.setAdapter(mPresenter.createAdapter());
+        showMainEmptyView(mPresenter.isAdapterEmpty());
         LinearLayoutManager linearLayoutManager = (LinearLayoutManager) mMoviesRecycler.getLayoutManager();
-        mBottomReachedListener = new BottomReachedScrollListener(linearLayoutManager, this::loadMovies);
+        mBottomReachedListener = new BottomReachedScrollListener(linearLayoutManager, () -> mPresenter.loadMovies());
         mMoviesRecycler.addOnScrollListener(mBottomReachedListener);
     }
 
     @Override
-    public void loadMovies() {
-        // if the content is being loaded - ignore this request
-        if (sMode == IDLE) {
-            final boolean isAdapterEmpty = mMovieAdapter.isEmpty();
-            // needed for correctly showing footer view
-            if (!isAdapterEmpty) setMode(true);
+    public void setupSearchLayout() {
+        if (null != getView()) {
+            mSearchRootView = ((ViewStub) getView().findViewById(R.id.viewstub_search)).inflate();
+            // at this point our layout is hidden and hasn't been given a chance to measure it's size
+            // we need to manually measure it to get rid of reveal animation first time issue
+            mSearchRootView.measure(makeMeasureSpec(getView().getWidth(), EXACTLY),
+                    makeMeasureSpec(getView().getHeight(), EXACTLY));
 
-            if (NetworkUtils.isNetworkAvailable(getActivity())) {
-                setMode(!isAdapterEmpty);
-                if (isAdapterEmpty) showProgressBar(true);
+            mSearchProgressBar = (ProgressBar) mSearchRootView.findViewById(R.id.search_progress_indicator);
+            mSearchProgressBar.getIndeterminateDrawable()
+                    .setColorFilter(ContextCompat.getColor(getContext(), R.color.lightGreen300), MULTIPLY);
+            mSearchEmptyView = mSearchRootView.findViewById(R.id.search_empty_view);
 
-                unsubscribe(KEY_MOVIES);
-                addSubscription(KEY_MOVIES, RxManager
-                        .getPopularMovies(mTraktTvDefaultApi, mPageCounter)
-                        .subscribe(new Subscriber<List<SearchItem.Movie>>() {
-                            @Override
-                            public void onCompleted() {
-                            }
+            RecyclerView mSearchRecyclerView = (RecyclerView) mSearchRootView.findViewById(R.id.searchRecyclerView);
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mSearchRootView.getContext());
+            mSearchRecyclerView.setLayoutManager(linearLayoutManager);
+            mSearchRecyclerView.setHasFixedSize(true);
+            mSearchRecyclerView.setAdapter(mPresenter.getSearchAdapter());
 
-                            @Override
-                            public void onError(Throwable e) {
-                                setMode(false);
-                                showSnackbar(false);
-                            }
-
-                            @Override
-                            public void onNext(List<SearchItem.Movie> movies) {
-                                setMode(false);
-                                if (isAdapterEmpty) showProgressBar(false);
-
-                                // successfully downloaded, can increment paging
-                                ++mPageCounter;
-
-                                mMovies.addAll(movies);
-                                mMovieAdapter.notifyDataSetChanged();
-                                toggleEmptyView();
-                            }
-                        }));
-            } else {
-                showSnackbar(true);
-            }
+            mSearchBottomReachedListener = new BottomReachedScrollListener(linearLayoutManager, () -> mPresenter.loadSearchData());
+            mSearchRecyclerView.addOnScrollListener(mBottomReachedListener);
         }
     }
 
-    /**
-     * Retains the current status of REST call.
-     * <p>
-     * Could be one of this values:
-     * <ul>
-     * <li>FETCHING</li>
-     * <li>IDLE</li>
-     * </ul>
-     *
-     * @param isFetching True - if currently data is being retrieved. False otherwise.
-     */
-    private void setMode(boolean isFetching) {
-        sMode = isFetching ? FETCHING : IDLE;
+    @Override
+    public void dispatchUnsubscribe(String key) {
+        unsubscribe(key);
     }
 
-    /**
-     * Show {@link Snackbar} in exceptional conditions.
-     *
-     * @param noInternet indicates, whether this {@code mSnackbar} is being show because of no
-     *                   internet connection. If true - no internet text would be show.
-     *                   Else - general error message.
-     */
+    @Override
+    public void dispatchAddSubscription(String key, Subscription subscription) {
+        addSubscription(key, subscription);
+    }
+
+    @Override
     public void showSnackbar(boolean noInternet) {
 
         mSnackbar = Snackbar
@@ -269,7 +213,7 @@ public class MoviesFragment extends BaseFragment implements MoviesContract.View 
                         Snackbar.LENGTH_INDEFINITE)
                 .setAction(noInternet ? getString(R.string.error_retry).toUpperCase() :
                         getString(R.string.message_went_wrong).toUpperCase(), view -> {
-                    loadMovies();
+                    mPresenter.loadMovies();
                 });
 
         mSnackbar.setActionTextColor(Color.RED);
@@ -280,42 +224,32 @@ public class MoviesFragment extends BaseFragment implements MoviesContract.View 
         mSnackbar.show();
     }
 
-    /**
-     * Shows or hides empty view, depending on {@code mMovieAdapter}'s size.
-     */
-    private void toggleEmptyView() {
-        if (!mMovieAdapter.isEmpty()) {
-            mEmptyView.animate().alpha(0.0f).setDuration(ANIM_DURATION_FADE).withEndAction(() -> {
-                mEmptyView.setVisibility(View.GONE);
-                mEmptyView.setAlpha(1.0f);
-            });
+    @Override
+    public void showMainEmptyView(boolean show) {
+        if (!show) {
+            mEmptyView.animate()
+                    .alpha(0f)
+                    .setDuration(ANIM_DURATION_FADE)
+                    .withEndAction(() -> {
+                        mEmptyView.setVisibility(View.GONE);
+                        mEmptyView.setAlpha(1f);
+                    });
         } else mEmptyView.setVisibility(View.VISIBLE);
     }
 
-    /**
-     * Control's {@code progressBar}'s visibility state.
-     *
-     * @param show if true, sets {@code mProgressBar}'s visibility to {@code View.VISIBLE},
-     *             else - animates to {@code View.GONE}.
-     */
-    private void showProgressBar(boolean show) {
+    @Override
+    public void showMainProgressBar(boolean show) {
         if (!show) {
-            mProgressBar.animate().alpha(0.0f).setDuration(ANIM_DURATION_FADE).withEndAction(() -> {
-                mProgressBar.setVisibility(View.GONE);
-                mProgressBar.setAlpha(1.0f);
-            });
+            mMainProgressBar.animate()
+                    .alpha(0f)
+                    .setDuration(ANIM_DURATION_FADE)
+                    .withEndAction(() -> {
+                        mMainProgressBar.setVisibility(View.GONE);
+                        mMainProgressBar.setAlpha(1f);
+                    });
         } else {
-            mProgressBar.setVisibility(View.VISIBLE);
+            mMainProgressBar.setVisibility(View.VISIBLE);
         }
-    }
-
-    /**
-     * Indicating whether currently the data is being fetched from server.
-     *
-     * @return true if data is being loaded, false otherwise.
-     */
-    public boolean isContentLoading() {
-        return sMode == FETCHING;
     }
 
     /**
@@ -327,20 +261,90 @@ public class MoviesFragment extends BaseFragment implements MoviesContract.View 
      */
     @SuppressWarnings("unused")
     public void onEvent(ConnectivityChangeEvent ev) {
-        if ((mPageCounter == 1 || mBottomReachedListener.isLoading())
-                && NetworkUtils.isNetworkAvailable(getActivity())) {
-            if (null != mSnackbar) mSnackbar.dismiss();
-            setMode(false);
-            loadMovies();
+        mPresenter.onNetworkStateChanged();
+    }
+
+    @Override
+    public void showSearchEmptyView(boolean show) {
+        if (!show) {
+            mSearchEmptyView.animate()
+                    .alpha(0f)
+                    .setDuration(ANIM_DURATION_FADE)
+                    .withEndAction(() -> {
+                        if (null != mSearchEmptyView) {
+                            mSearchEmptyView.setVisibility(View.GONE);
+                            mSearchEmptyView.setAlpha(1f);
+                        }
+                    });
+        } else mSearchEmptyView.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void showSearchProgressBar(boolean show) {
+        if (!show) {
+            mSearchProgressBar.animate()
+                    .alpha(0f)
+                    .setDuration(ANIM_DURATION_FADE)
+                    .withEndAction(() -> {
+                        if (null != mSearchProgressBar) {
+                            mSearchProgressBar.setVisibility(View.GONE);
+                            mSearchProgressBar.setAlpha(1f);
+                        }
+                    });
+        } else {
+            mSearchProgressBar.setVisibility(View.VISIBLE);
         }
     }
 
-    /**
-     * Fetches the current text in {@code mSearchView}.
-     *
-     * @return String with the query, that user has typed.
-     */
+    @Override
+    public void resetSearchBottomReachedListener() {
+        mSearchBottomReachedListener.reset();
+    }
+
+    @Override
+    public boolean isBottomReachedAndLoading() {
+        return mBottomReachedListener.isLoading();
+    }
+
+    @Override
     public String getQuery() {
         return mSearchView.getQuery().toString();
+    }
+
+    @Override
+    public void animateSearchView(boolean show) {
+        if (show) {
+            AnimationUtils.animateSearchClick(mSearchRootView, mSearchRootView.getMeasuredHeight(), mSearchRootView.getTop(), true);
+        } else {
+            // we do not want all data displayed when user presses search again
+            mPresenter.resetSearchData();
+            AnimationUtils.animateSearchClick(mSearchRootView, mSearchRootView.getRight(), mSearchRootView.getTop(), false);
+        }
+    }
+
+    @Override
+    public void launchDetailMovieActivity(ImageView transitionImageView, SearchItem.Movie movie) {
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(TAG_MOVIE, movie);
+
+        if (AndroidVersionUtils.isHigherEqualToLollipop()) {
+            final Pair<View, String>[] pairs = AnimationUtils
+                    .createSafeTransitionParticipants(getActivity(), false,
+                            new Pair<>(transitionImageView, getString(R.string.transition_cover)));
+
+            DetailMovieActivity.launchActivity(getContext(), bundle, pairs);
+        } else {
+            DetailMovieActivity.launchActivity(this, bundle, transitionImageView);
+        }
+    }
+
+    @Override
+    public void launchActivity(Intent intent) {
+        startActivity(intent);
+    }
+
+    @Override
+    public void dismissSnackBar() {
+        if (null != mSnackbar) mSnackbar.dismiss();
     }
 }

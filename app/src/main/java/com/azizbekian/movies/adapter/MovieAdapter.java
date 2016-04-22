@@ -1,10 +1,6 @@
 package com.azizbekian.movies.adapter;
 
-import android.content.Intent;
-import android.net.Uri;
-import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.util.Pair;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -17,17 +13,13 @@ import android.widget.TextView;
 import com.azizbekian.movies.MoviesApplication;
 import com.azizbekian.movies.R;
 import com.azizbekian.movies.entity.SearchItem;
-import com.azizbekian.movies.fragment.movies.MoviesFragment;
+import com.azizbekian.movies.fragment.movies.MoviesContract;
 import com.azizbekian.movies.misc.Constants;
-import com.azizbekian.movies.activity.DetailMovieActivity;
-import com.azizbekian.movies.utils.AndroidVersionUtils;
-import com.azizbekian.movies.utils.AnimationUtils;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 import static android.graphics.PorterDuff.Mode.MULTIPLY;
-import static com.azizbekian.movies.fragment.DetailMovieFragment.TAG_MOVIE;
 
 /**
  * Created on April 02, 2016.
@@ -36,12 +28,12 @@ import static com.azizbekian.movies.fragment.DetailMovieFragment.TAG_MOVIE;
  */
 public class MovieAdapter extends HeaderFooterRecyclerViewAdapter {
 
-    private MoviesFragment mFragment;
+    private MoviesContract.Presenter mPresenter;
     private Picasso mPicasso;
     private List<SearchItem.Movie> mData;
 
-    public MovieAdapter(MoviesFragment fragment, List<SearchItem.Movie> movies) {
-        mFragment = fragment;
+    public MovieAdapter(MoviesContract.Presenter presenter, List<SearchItem.Movie> movies) {
+        mPresenter = presenter;
         mData = movies;
         mPicasso = MoviesApplication.getAppComponent().getPicasso();
     }
@@ -85,7 +77,7 @@ public class MovieAdapter extends HeaderFooterRecyclerViewAdapter {
 
     @Override
     protected void onBindFooterItemViewHolder(RecyclerView.ViewHolder footerViewHolder, int position) {
-        footerViewHolder.itemView.setVisibility(mFragment.isContentLoading() ? View.VISIBLE : View.GONE);
+        footerViewHolder.itemView.setVisibility(!mPresenter.isMoviesModeIdle() ? View.VISIBLE : View.GONE);
     }
 
     @Override
@@ -116,9 +108,9 @@ public class MovieAdapter extends HeaderFooterRecyclerViewAdapter {
                 .placeholder(R.drawable.placeholder)
                 .into(contentHolder.movieCover);
 
-        contentHolder.movieImdb.setOnClickListener(v -> openUri(Constants.PREFIX_IMDB + movie.getImdb()));
-        contentHolder.movieTrailer.setOnClickListener(v -> openUri(movie.trailer));
-        contentHolder.movieContainer.setOnClickListener(v -> launchDetailMovieActivity(contentHolder, movie));
+        contentHolder.movieImdb.setOnClickListener(v -> mPresenter.openUri(Constants.PREFIX_IMDB + movie.getImdb()));
+        contentHolder.movieTrailer.setOnClickListener(v -> mPresenter.openUri(movie.trailer));
+        contentHolder.movieContainer.setOnClickListener(v -> mPresenter.launchDetailMovieActivity(contentHolder.movieCover, movie));
     }
 
     @Override
@@ -138,31 +130,6 @@ public class MovieAdapter extends HeaderFooterRecyclerViewAdapter {
      */
     public boolean isEmpty() {
         return null == mData || mData.size() == 0;
-    }
-
-    /**
-     * Launches {@link DetailMovieActivity}, providing some more information to perform animation transition.
-     */
-    private void launchDetailMovieActivity(ContentViewHolder contentHolder, SearchItem.Movie movie) {
-        Bundle bundle = new Bundle();
-        bundle.putParcelable(TAG_MOVIE, movie);
-
-        if (AndroidVersionUtils.isHigherEqualToLollipop()) {
-            final Pair<View, String>[] pairs = AnimationUtils
-                    .createSafeTransitionParticipants(mFragment.getActivity(), false,
-                            new Pair<>(contentHolder.movieCover, mFragment.getContext().getString(R.string.transition_cover)));
-
-            DetailMovieActivity.launchActivity(mFragment.getContext(), bundle, pairs);
-        } else {
-            DetailMovieActivity.launchActivity(mFragment, bundle, contentHolder.movieCover);
-        }
-    }
-
-    private void openUri(String uri) {
-        if (TextUtils.isEmpty(uri)) return;
-        Intent i = new Intent(Intent.ACTION_VIEW);
-        i.setData(Uri.parse(uri));
-        mFragment.getContext().startActivity(i);
     }
 
     public static class ContentViewHolder extends RecyclerView.ViewHolder {

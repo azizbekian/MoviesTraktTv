@@ -18,9 +18,9 @@ import dagger.Component;
 @Component(modules  = {AppModule.class})
 public interface AppComponent {
 
-    void inject(MoviesFragment fragment);
     void inject(DetailMovieFragment fragment);
 
     Picasso getPicasso();
+    TraktTvApi.Default getDefaultApi();
     TraktTvApi.Search getSearchApi();
 }
