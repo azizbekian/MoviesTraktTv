@@ -1,5 +1,7 @@
 package com.azizbekian.movies.utils;
 
+import android.text.TextUtils;
+
 import java.util.concurrent.TimeUnit;
 
 import rx.Observable;
@@ -31,6 +33,7 @@ public class RxUtils {
     private static final Observable.Transformer NOT_EMPTY_TEXT_CHANGE_TRANSFORMER = o -> ((Observable<CharSequence>) o)
             .skip(1)
             .debounce(RxUtils.DURATION_DEBOUNCE, TimeUnit.MILLISECONDS)
+            .filter(charSequence -> !TextUtils.isEmpty(charSequence))
             .observeOn(AndroidSchedulers.mainThread());
 
     /**

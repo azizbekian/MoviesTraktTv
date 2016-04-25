@@ -8,14 +8,13 @@ import android.text.TextUtils;
 import android.widget.ImageView;
 
 import com.azizbekian.movies.MoviesApplication;
-import com.azizbekian.movies.adapter.MovieAdapter;
 import com.azizbekian.movies.entity.SearchItem;
+import com.azizbekian.movies.manager.MovieHelper;
 import com.azizbekian.movies.manager.SearchHelper;
 import com.azizbekian.movies.misc.MoviesModeType;
 import com.azizbekian.movies.misc.SearchModeType;
 import com.azizbekian.movies.utils.NetworkUtils;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -32,16 +31,13 @@ public class MoviesPresenter implements MoviesContract.Presenter {
 
     private MoviesContract.View mView;
     private MoviesContract.Model mModel;
-    private MovieAdapter mMovieAdapter;
-    private List<SearchItem.Movie> mMovies = new ArrayList<>();
+    private MovieHelper mMovieHelper;
     private SearchHelper mSearchHelper;
-
-    private int mMode = MOVIES_IDLE;
-    private int mMoviePageCounter = 1;
 
     public MoviesPresenter(MoviesFragment fragment) {
         mView = fragment;
         mModel = new MovieModel(this);
+        mMovieHelper = new MovieHelper(this);
         mSearchHelper = new SearchHelper(this);
     }
 
@@ -57,78 +53,90 @@ public class MoviesPresenter implements MoviesContract.Presenter {
     }
 
     @Override
-    public void loadMovies() {
+    public void finish() {
+        cancelSearch();
+        mMovieHelper = null;
+        mSearchHelper = null;
+    }
 
-        if (isMoviesModeIdle()) {
-            final boolean isAdapterEmpty = isAdapterEmpty();
-            if (!isAdapterEmpty) setMoviesMode(MoviesContract.Presenter.MOVIES_FETCHING);
+    // ---- START MAIN ----
 
-            if (isNetworkAvailable()) {
-                setMoviesMode(isAdapterEmpty ? MoviesContract.Presenter.MOVIES_IDLE : MoviesContract.Presenter.MOVIES_FETCHING);
+    @Override
+    public int getMoviePageCounter() {
+        return mMovieHelper.getPageCounter();
+    }
 
-                if (null != mView) {
-                    if (isAdapterEmpty) mView.showMainProgressBar(true);
+    @Override
+    public void notifyMovieAdapterChanged() {
+        mMovieHelper.notifyDataSetChanged();
+        if (null != mView) mView.showMainEmptyView(isMovieAdapterEmpty());
+    }
 
-                    mView.dispatchUnsubscribe(MoviesContract.Model.KEY_MOVIES);
-                    mView.dispatchAddSubscription(MoviesContract.Model.KEY_MOVIES, mModel.loadMovies(getMoviePageCounter()));
-                }
-            } else {
-                if (null != mView) mView.showSnackbar(true);
-            }
-        }
+    @Override
+    public void addMovies(List<SearchItem.Movie> movies) {
+        mMovieHelper.addMovies(movies);
+        notifyMovieAdapterChanged();
     }
 
     @Override
     public void onMoviesLoaded(List<SearchItem.Movie> movies) {
         setMoviesMode(MoviesContract.Presenter.MOVIES_IDLE);
-        if (isAdapterEmpty() && null != mView) mView.showMainProgressBar(false);
+        if (isMovieAdapterEmpty() && null != mView) mView.showMainProgressBar(false);
 
         incrementMoviePageCounter();
         addMovies(movies);
     }
 
     @Override
-    public int getMoviePageCounter() {
-        return mMoviePageCounter;
-    }
-
-    @Override
-    public void notifyMovieAdapterChanged() {
-        mMovieAdapter.notifyDataSetChanged();
-        if (null != mView) mView.showMainEmptyView(isAdapterEmpty());
-    }
-
-    @Override
-    public void addMovies(List<SearchItem.Movie> movies) {
-        mMovies.addAll(movies);
-        notifyMovieAdapterChanged();
-    }
-
-    @Override
     public int incrementMoviePageCounter() {
-        return ++mMoviePageCounter;
+        return mMovieHelper.incrementPage();
     }
 
     @Override
     public void onErrorLoadingMovieData() {
-        setMoviesMode(MoviesContract.Presenter.MOVIES_IDLE);
+        setMoviesMode(MOVIES_FETCHING);
         if (null != mView) mView.showSnackbar(false);
     }
 
     @Override
-    public boolean isNetworkAvailable() {
-        return NetworkUtils.isNetworkAvailable(MoviesApplication.getAppContext());
-    }
-
-    @Override
     public boolean isMoviesModeIdle() {
-        return mMode == MOVIES_IDLE;
+        return mMovieHelper.isIdle();
     }
 
     @Override
     public void setMoviesMode(@MoviesModeType int mode) {
-        mMode = mode;
+        mMovieHelper.setMode(mode);
     }
+
+    @Override
+    public void loadMovies() {
+        if (!isNetworkAvailable()) {
+            if (!isMovieAdapterEmpty()) setMoviesMode(MOVIES_FETCHING);
+            if (null != mView) mView.showSnackbar(true);
+        } else if (isMoviesModeIdle()) {
+            final boolean isAdapterEmpty = isMovieAdapterEmpty();
+            if (!isAdapterEmpty) setMoviesMode(MoviesContract.Presenter.MOVIES_FETCHING);
+            if (null != mView) {
+                if (isAdapterEmpty) mView.showMainProgressBar(true);
+                mView.dispatchUnsubscribe(MoviesContract.Model.KEY_MOVIES);
+                mView.dispatchAddSubscription(MoviesContract.Model.KEY_MOVIES, mModel.loadMovies(getMoviePageCounter()));
+            }
+        }
+    }
+
+    @Override
+    public RecyclerView.Adapter createMovieAdapter() {
+        return mMovieHelper.getAdapter();
+    }
+
+    @Override
+    public boolean isMovieAdapterEmpty() {
+        return mMovieHelper.isAdapterEmpty();
+    }
+
+    // ---- END MAIN ----
+
+    // ---- START SEARCH ----
 
     @Override
     public void cancelSearch() {
@@ -144,32 +152,11 @@ public class MoviesPresenter implements MoviesContract.Presenter {
     }
 
     @Override
-    public RecyclerView.Adapter createAdapter() {
-        return mMovieAdapter = new MovieAdapter(this, mMovies);
-    }
-
-    @Override
-    public boolean isAdapterEmpty() {
-        return mMovieAdapter.isEmpty();
-    }
-
-    @Override
-    public void onNetworkStateChanged() {
-        if ((getMoviePageCounter() == 1
-                || (null != mView && mView.isBottomReachedAndLoading()))
-                && isNetworkAvailable()) {
-            mView.dismissSnackBar();
-            setMoviesMode(MoviesContract.Presenter.MOVIES_IDLE);
-            loadMovies();
-        }
-    }
-
-    @Override
     public boolean onSearchMagnifierClicked(SearchView searchView) {
         if (null != mView) {
             mView.dispatchAddSubscription(
                     MoviesContract.Model.KEY_SEARCH,
-                    mModel.performInitialSearch(searchView));
+                    mModel.listenQueryChange(searchView));
         }
         return true;
     }
@@ -177,11 +164,6 @@ public class MoviesPresenter implements MoviesContract.Presenter {
     @Override
     public void setSearchMode(@SearchModeType int mode) {
         mSearchHelper.setMode(mode);
-    }
-
-    @Override
-    public void clearSearchPageCounter() {
-        mSearchHelper.clearSearchPageCounter();
     }
 
     @Override
@@ -195,25 +177,15 @@ public class MoviesPresenter implements MoviesContract.Presenter {
     }
 
     @Override
-    public void onSearchDataReceived(List<SearchItem> searchList) {
-        if(isSearchAdapterEmpty()) mSearchHelper.setSearchList(searchList);
-        else mSearchHelper.addSearchResult(searchList);
+    public void onSearchDataReceived(List<SearchItem> searchList, boolean append) {
+        if (!isSearchAdapterEmpty() && append) {
+            mSearchHelper.addSearchResult(searchList);
+        } else mSearchHelper.setSearchList(searchList);
     }
 
     @Override
     public void toggleSearchProgressBar(boolean show) {
         if (null != mView) mView.showSearchProgressBar(show);
-    }
-
-    @Override
-    public MoviesContract.View getView() {
-        return mView;
-    }
-
-    @Override
-    public void finish() {
-        cancelSearch();
-        mSearchHelper = null;
     }
 
     @Override
@@ -228,12 +200,7 @@ public class MoviesPresenter implements MoviesContract.Presenter {
 
     @Override
     public void loadSearchData() {
-        mSearchHelper.setCurrentSearchCall(mModel.performAdditionalSearch());
-    }
-
-    @Override
-    public int getSearchMode() {
-        return mSearchHelper.getMode();
+        mModel.performSearch(getQuery());
     }
 
     @Override
@@ -256,26 +223,89 @@ public class MoviesPresenter implements MoviesContract.Presenter {
     }
 
     @Override
-    public void resetSearch() {
-        setSearchMode(isSearchAdapterEmpty() ? MoviesContract.Presenter.SEARCH_IDLE : MoviesContract.Presenter.SEARCH_FETCHING);
-        clearSearchPageCounter();
-        toggleSearchProgressBar(true);
-    }
-
-
-    @Override
     public boolean isSearchAdapterEmpty() {
         return mSearchHelper.isAdapterEmpty();
     }
 
     @Override
-    public String getQuery() {
-        return null != mView ? mView.getQuery() : "";
+    public boolean isSearchModeIdle() {
+        return mSearchHelper.getMode() == MoviesContract.Presenter.SEARCH_IDLE;
     }
 
     @Override
-    public void showSnackBar(boolean noConnection) {
-        if (null != mView) mView.showSnackbar(noConnection);
+    public void onSearchError() {
+        setSearchMode(SEARCH_IDLE);
+    }
+
+    @Override
+    public void onPerformSearchCall(Call<List<SearchItem>> call) {
+        if (null != call && isSearchModeIdle()) {
+            setSearchMode(isSearchAdapterEmpty() ? SEARCH_IDLE : MoviesContract.Presenter.SEARCH_FETCHING);
+            if (isSearchAdapterEmpty()) toggleSearchProgressBar(true);
+
+            cancelSearch();
+            setSearchCall(call);
+
+            call.enqueue(new Callback<List<SearchItem>>() {
+                @Override
+                public void onResponse(Call<List<SearchItem>> call, Response<List<SearchItem>> response) {
+                    setSearchMode(SEARCH_IDLE);
+                    toggleSearchProgressBar(false);
+                    List<SearchItem> searchItems = response.body();
+                    if (searchItems == null) {
+                        onSearchDataReceived(Collections.emptyList(), false);
+                    } else {
+                        incrementSearchPageCounter();
+                        onSearchDataReceived(searchItems, true);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<List<SearchItem>> call, Throwable t) {
+                    setSearchMode(SEARCH_IDLE);
+                    if (isSearchAdapterEmpty()) toggleSearchProgressBar(false);
+                    onSearchDataReceived(Collections.emptyList(), false);
+                }
+            });
+        }
+    }
+
+    @Override
+    public void setSearchCall(Call<List<SearchItem>> call) {
+        mSearchHelper.setCurrentSearchCall(call);
+    }
+
+    // ---- END SEARCH ----
+
+    @Override
+    public boolean isNetworkAvailable() {
+        return NetworkUtils.isNetworkAvailable(MoviesApplication.getAppContext());
+    }
+
+    @Override
+    public void onNetworkStateChanged() {
+        if (null != mView) {
+            if (isNetworkAvailable()) {
+                if (mView.isBottomReachedAndLoading() || !isMoviesModeIdle()) {
+                    mView.dismissSnackBar();
+                    setMoviesMode(MoviesContract.Presenter.MOVIES_IDLE);
+                    loadMovies();
+                } else if (mView.isSearchBottomReachedAndLoading() || !isSearchModeIdle()) {
+                    setSearchMode(SEARCH_IDLE);
+                    loadSearchData();
+                }
+            }
+        }
+    }
+
+    @Override
+    public MoviesContract.View getView() {
+        return mView;
+    }
+
+    @Override
+    public String getQuery() {
+        return null != mView ? mView.getQuery() : "";
     }
 
     @Override
@@ -294,37 +324,8 @@ public class MoviesPresenter implements MoviesContract.Presenter {
     }
 
     @Override
-    public boolean isSearchModeIdle() {
-        return mSearchHelper.getMode() == MoviesContract.Presenter.SEARCH_IDLE;
-    }
-
-    @Override
-    public void onSearchError() {
-        setSearchMode(SEARCH_IDLE);
-    }
-
-    @Override
-    public void onPerformSearchCall(Call<List<SearchItem>> call) {
-        call.enqueue(new Callback<List<SearchItem>>() {
-            @Override
-            public void onResponse(Call<List<SearchItem>> call, Response<List<SearchItem>> response) {
-                setSearchMode(SEARCH_IDLE);
-                toggleSearchProgressBar(false);
-                List<SearchItem> searchItems = response.body();
-                if (searchItems == null) {
-                    onSearchDataReceived(Collections.emptyList());
-                } else {
-                    incrementSearchPageCounter();
-                    onSearchDataReceived(searchItems);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<SearchItem>> call, Throwable t) {
-                setSearchMode(SEARCH_IDLE);
-                if (isSearchAdapterEmpty()) toggleSearchProgressBar(false);
-                onSearchDataReceived(Collections.emptyList());
-            }
-        });
+    public void onQueryChanged(String newQuery) {
+        resetSearchData();
+        mModel.performSearch(newQuery);
     }
 }

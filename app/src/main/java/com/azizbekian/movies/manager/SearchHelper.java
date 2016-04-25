@@ -26,8 +26,7 @@ public class SearchHelper {
     private SearchAdapter mSearchAdapter;
     private Call<List<SearchItem>> mCurrentSearchCall;
 
-    public static final int INITIAL_PAGE = 2;
-    private int mPageCounter = INITIAL_PAGE;
+    private int mPageCounter = 1;
     private int mMode = SEARCH_IDLE;
 
     private boolean mIsInflated = false;
@@ -54,6 +53,12 @@ public class SearchHelper {
         return null != mSearchAdapter && mSearchAdapter.isEmpty();
     }
 
+    public void setSearchList(List<SearchItem> searchList) {
+        mSearchAdapter.setItems(searchList);
+        mPresenter.toggleSearchEmptyView();
+        mPresenter.resetSearchBottomReachedListener();
+    }
+
     public void addSearchResult(List<SearchItem> result) {
         mSearchAdapter.addItems(result);
         mPresenter.toggleSearchEmptyView();
@@ -65,10 +70,6 @@ public class SearchHelper {
 
     public int getMode() {
         return mMode;
-    }
-
-    public void clearSearchPageCounter() {
-        mPageCounter = INITIAL_PAGE;
     }
 
     public int incrementSearchPageCounter() {
@@ -83,16 +84,12 @@ public class SearchHelper {
         if (null != mCurrentSearchCall) mCurrentSearchCall.cancel();
     }
 
-    public void setSearchList(List<SearchItem> searchList) {
-        mSearchAdapter.setItems(searchList);
-        mPresenter.toggleSearchEmptyView();
-        mPresenter.resetSearchBottomReachedListener();
-    }
-
     public void resetData() {
         cancelSearch();
-        mPageCounter = INITIAL_PAGE;
+        mPageCounter = 1;
+        setMode(MoviesContract.Presenter.SEARCH_IDLE);
         setSearchList(Collections.emptyList());
+        mSearchAdapter.notifyDataSetChanged();
     }
 
     public void setCurrentSearchCall(Call<List<SearchItem>> mCurrentSearchCall) {

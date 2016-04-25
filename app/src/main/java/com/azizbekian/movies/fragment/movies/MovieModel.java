@@ -11,11 +11,9 @@ import com.jakewharton.rxbinding.support.v7.widget.RxSearchView;
 import java.util.List;
 
 import retrofit2.Call;
-import rx.Observer;
 import rx.Subscriber;
 import rx.Subscription;
 
-import static com.azizbekian.movies.fragment.movies.MoviesContract.Presenter.SEARCH_IDLE;
 import static com.azizbekian.movies.misc.Constants.DEFAULT_MOVIE_LIMIT;
 import static com.azizbekian.movies.misc.Constants.EXTEND_TYPE_FULL_IMAGES;
 import static com.azizbekian.movies.misc.Constants.TYPE_MOVIE;
@@ -60,15 +58,12 @@ public class MovieModel implements MoviesContract.Model {
     }
 
     @Override
-    public Subscription performInitialSearch(SearchView searchView) {
+    @SuppressWarnings("unchecked")
+    public Subscription listenQueryChange(SearchView searchView) {
         return RxSearchView
                 .queryTextChanges(searchView)
                 .compose(RxUtils.applyNotEmptyTextChangeTransformer())
-                .map(charSequence -> {
-                    mPresenter.resetSearch();
-                    return mTraktTvSearchApi.searchMovies(charSequence.toString(), TYPE_MOVIE, 1);
-                })
-                .subscribe(new Observer<Call<List<SearchItem>>>() {
+                .subscribe(new Subscriber<CharSequence>() {
                     @Override
                     public void onCompleted() {
                     }
@@ -79,31 +74,24 @@ public class MovieModel implements MoviesContract.Model {
                     }
 
                     @Override
-                    public void onNext(Call<List<SearchItem>> listCall) {
-                        mPresenter.onPerformSearchCall(listCall);
+                    public void onNext(CharSequence charSequence) {
+                        mPresenter.onQueryChanged(charSequence.toString());
                     }
                 });
     }
 
     @Override
-    public Call<List<SearchItem>> performAdditionalSearch() {
+    public Call<List<SearchItem>> performSearch(String query) {
+
         Call<List<SearchItem>> searchCall = null;
-
-        if (mPresenter.getSearchMode() == SEARCH_IDLE) {
-            final boolean isAdapterEmpty = mPresenter.isSearchAdapterEmpty();
-            if (!isAdapterEmpty) mPresenter.setSearchMode(MoviesContract.Presenter.SEARCH_FETCHING);
-
-            if (mPresenter.isNetworkAvailable()) {
-                mPresenter.setSearchMode(isAdapterEmpty ? SEARCH_IDLE : MoviesContract.Presenter.SEARCH_FETCHING);
-                if (isAdapterEmpty) mPresenter.toggleSearchProgressBar(true);
-                String query = mPresenter.getQuery();
-                mPresenter.cancelSearch();
-                searchCall = mTraktTvSearchApi.searchMovies(query, TYPE_MOVIE, mPresenter.getSearchPageCounter());
-                mPresenter.onPerformSearchCall(searchCall);
-            } else {
-                mPresenter.showSnackBar(true);
-            }
+        if (mPresenter.isNetworkAvailable()) {
+            searchCall = mTraktTvSearchApi.searchMovies(query, TYPE_MOVIE, mPresenter.getSearchPageCounter());
+            mPresenter.onPerformSearchCall(searchCall);
+        } else {
+            mPresenter.setSearchMode(MoviesContract.Presenter.SEARCH_FETCHING);
+            mPresenter.toggleSearchProgressBar(false);
         }
+
         return searchCall;
     }
 

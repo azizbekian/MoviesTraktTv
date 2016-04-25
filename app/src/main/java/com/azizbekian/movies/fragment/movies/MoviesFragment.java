@@ -3,6 +3,7 @@ package com.azizbekian.movies.fragment.movies;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
@@ -21,6 +22,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -34,11 +36,13 @@ import com.azizbekian.movies.listener.BottomReachedScrollListener;
 import com.azizbekian.movies.utils.AndroidVersionUtils;
 import com.azizbekian.movies.utils.AnimationUtils;
 import com.azizbekian.movies.utils.ViewUtils;
+import com.jakewharton.rxbinding.view.RxView;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.greenrobot.event.EventBus;
 import rx.Subscription;
+import rx.functions.Action1;
 
 import static android.graphics.PorterDuff.Mode.MULTIPLY;
 import static android.view.View.MeasureSpec.EXACTLY;
@@ -54,6 +58,8 @@ import static com.azizbekian.movies.misc.Constants.ANIM_DURATION_FADE;
 public class MoviesFragment extends BaseFragment implements MoviesContract.View {
 
     public static final String TAG = MoviesFragment.class.getSimpleName();
+
+    private static final String KEY_SEARCHVIEW_CLOSE = "key_searchview_close";
 
     @Bind(R.id.coordinatorLayout) CoordinatorLayout mCoordinatorLayout;
     @Bind(R.id.recyclerView) RecyclerView mMoviesRecycler;
@@ -99,11 +105,21 @@ public class MoviesFragment extends BaseFragment implements MoviesContract.View 
         MenuItem mSearchItem = menu.findItem(R.id.action_search);
         mSearchView = (SearchView) mSearchItem.getActionView();
 
+        addSubscription(KEY_SEARCHVIEW_CLOSE, RxView
+                .clicks(mSearchView.findViewById(R.id.search_close_btn))
+                .subscribe(aVoid -> {
+                    mPresenter.resetSearchData();
+                    EditText et = (EditText) mSearchView.findViewById(R.id.search_src_text);
+                    et.setText("");
+                    mSearchView.setQuery("", false);
+                }));
+
         MenuItemCompat.setOnActionExpandListener(mSearchItem,
                 new MenuItemCompat.OnActionExpandListener() {
                     @Override
                     public boolean onMenuItemActionCollapse(MenuItem item) {
                         mPresenter.revealSearchLayout(false);
+                        mPresenter.resetSearchData();
                         return true;
                     }
 
@@ -117,8 +133,10 @@ public class MoviesFragment extends BaseFragment implements MoviesContract.View 
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_search) {
-            mPresenter.onSearchMagnifierClicked(mSearchView);
+        switch (item.getItemId()) {
+            case R.id.action_search:
+                mPresenter.onSearchMagnifierClicked(mSearchView);
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -163,8 +181,8 @@ public class MoviesFragment extends BaseFragment implements MoviesContract.View 
     @Override
     public void setupMainRecycler() {
         mMoviesRecycler.setHasFixedSize(true);
-        mMoviesRecycler.setAdapter(mPresenter.createAdapter());
-        showMainEmptyView(mPresenter.isAdapterEmpty());
+        mMoviesRecycler.setAdapter(mPresenter.createMovieAdapter());
+        showMainEmptyView(mPresenter.isMovieAdapterEmpty());
         LinearLayoutManager linearLayoutManager = (LinearLayoutManager) mMoviesRecycler.getLayoutManager();
         mBottomReachedListener = new BottomReachedScrollListener(linearLayoutManager, () -> mPresenter.loadMovies());
         mMoviesRecycler.addOnScrollListener(mBottomReachedListener);
@@ -191,7 +209,7 @@ public class MoviesFragment extends BaseFragment implements MoviesContract.View 
             mSearchRecyclerView.setAdapter(mPresenter.getSearchAdapter());
 
             mSearchBottomReachedListener = new BottomReachedScrollListener(linearLayoutManager, () -> mPresenter.loadSearchData());
-            mSearchRecyclerView.addOnScrollListener(mBottomReachedListener);
+            mSearchRecyclerView.addOnScrollListener(mSearchBottomReachedListener);
         }
     }
 
@@ -252,18 +270,6 @@ public class MoviesFragment extends BaseFragment implements MoviesContract.View 
         }
     }
 
-    /**
-     * We listen for connectivity change broadcast for corner cases.
-     * E.g.: user opens the app, there is no internet connection, snackbar is being show.
-     * When connection establishes we want the data to be loaded, not relay on user's action.
-     *
-     * @param ev empty event
-     */
-    @SuppressWarnings("unused")
-    public void onEvent(ConnectivityChangeEvent ev) {
-        mPresenter.onNetworkStateChanged();
-    }
-
     @Override
     public void showSearchEmptyView(boolean show) {
         if (!show) {
@@ -307,6 +313,11 @@ public class MoviesFragment extends BaseFragment implements MoviesContract.View 
     }
 
     @Override
+    public boolean isSearchBottomReachedAndLoading() {
+        return mSearchBottomReachedListener.isLoading();
+    }
+
+    @Override
     public String getQuery() {
         return mSearchView.getQuery().toString();
     }
@@ -346,5 +357,17 @@ public class MoviesFragment extends BaseFragment implements MoviesContract.View 
     @Override
     public void dismissSnackBar() {
         if (null != mSnackbar) mSnackbar.dismiss();
+    }
+
+    /**
+     * We listen for connectivity change broadcast for corner cases.
+     * E.g.: user opens the app, there is no internet connection, snackbar is being show.
+     * When connection establishes we want the data to be loaded, not relay on user's action.
+     *
+     * @param ev empty event
+     */
+    @SuppressWarnings("unused")
+    public void onEvent(ConnectivityChangeEvent ev) {
+        mPresenter.onNetworkStateChanged();
     }
 }

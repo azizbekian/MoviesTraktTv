@@ -25,5 +25,4 @@ public class AndroidVersionUtils {
     public static boolean isHigherEqualToLollipop() {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;
     }
-
 }

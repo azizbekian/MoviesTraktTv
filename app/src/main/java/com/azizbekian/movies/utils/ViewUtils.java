@@ -1,8 +1,11 @@
 package com.azizbekian.movies.utils;
 
+import android.content.Context;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 /**
  * Created on April 02, 2016.
@@ -31,5 +34,4 @@ public class ViewUtils {
                 actionBar.setDisplayHomeAsUpEnabled(true);
         }
     }
-
 }

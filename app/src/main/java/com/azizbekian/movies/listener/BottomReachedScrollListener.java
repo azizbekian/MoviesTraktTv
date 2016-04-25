@@ -2,6 +2,7 @@ package com.azizbekian.movies.listener;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
 /**
  * A subclass of {@link RecyclerView.OnScrollListener},

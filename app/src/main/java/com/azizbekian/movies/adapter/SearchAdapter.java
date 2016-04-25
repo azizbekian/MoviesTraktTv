@@ -82,7 +82,7 @@ public class SearchAdapter extends HeaderFooterRecyclerViewAdapter {
 
     @Override
     protected void onBindFooterItemViewHolder(RecyclerView.ViewHolder footerViewHolder, int position) {
-        footerViewHolder.itemView.setVisibility(!mPresenter.isSearchModeIdle() ? View.VISIBLE : View.GONE);
+        footerViewHolder.itemView.setVisibility(!mPresenter.isSearchModeIdle() && !mPresenter.isSearchAdapterEmpty() ? View.VISIBLE : View.GONE);
     }
 
     @Override
